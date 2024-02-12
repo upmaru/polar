@@ -13,5 +13,7 @@ defmodule Polar.Repo.Migrations.CreateProducts do
 
       timestamps(type: :utc_datetime_usec)
     end
+
+    create index(:products, [:os, :release, :arch, :variant], unique: true)
   end
 end

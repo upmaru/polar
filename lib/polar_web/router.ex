@@ -20,6 +20,14 @@ defmodule PolarWeb.Router do
     get "/", PageController, :home
   end
 
+  scope "/streams", PolarWeb.Streams do
+    pipe_through :api
+
+    scope "/v1" do
+      get "/images.json", ImageController, :index
+    end
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", PolarWeb do
   #   pipe_through :api

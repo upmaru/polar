@@ -1,0 +1,54 @@
+# Compute Hash for LXD Image
+
+## Hash for metadata file
+
+```elixir
+metadata = Path.expand("~/Downloads/incus.tar.xz")
+hash_ref = :crypto.hash_init(:sha256)
+
+metadata
+|> File.stream!([], 2048)
+|> Enum.reduce(hash_ref, fn chunk, prev_ref ->
+  :crypto.hash_update(prev_ref, chunk)
+end)
+|> :crypto.hash_final()
+|> Base.encode16()
+|> String.downcase()
+```
+
+## Section
+
+```elixir
+squash = Path.expand("~/Downloads/rootfs.squashfs")
+another_ref = :crypto.hash_init(:sha256)
+
+squash
+|> File.stream!([], 2048)
+|> Enum.reduce(another_ref, fn chunk, prev_ref ->
+  :crypto.hash_update(prev_ref, chunk)
+end)
+|> :crypto.hash_final()
+|> Base.encode16()
+|> String.downcase()
+```
+
+## Combined Hash
+
+```elixir
+metadata = Path.expand("~/Downloads/incus.tar.xz")
+rootfs = Path.expand("~/Downloads/rootfs.squashfs")
+
+hash_ref = :crypto.hash_init(:sha256)
+
+[metadata, rootfs]
+|> Enum.reduce(hash_ref, fn file, prev_ref ->
+  file
+  |> File.stream!([], 2048)
+  |> Enum.reduce(prev_ref, fn chunk, ref ->
+    :crypto.hash_update(ref, chunk)
+  end)
+end)
+|> :crypto.hash_final()
+|> Base.encode16()
+|> String.downcase()
+```

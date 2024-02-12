@@ -11,5 +11,6 @@ defmodule Polar.Repo.Migrations.CreateVersions do
     end
 
     create index(:versions, [:product_id])
+    create index(:versions, [:product_id, :serial], unique: true)
   end
 end
