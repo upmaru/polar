@@ -7,6 +7,8 @@ defmodule Polar.Repo.Migrations.CreateVersions do
       add :serial, :citext, null: false
       add :product_id, references(:products, on_delete: :restrict), null: false
 
+      add :combined, :map, default: %{}, null: false
+
       timestamps(type: :utc_datetime_usec)
     end
 

@@ -6,6 +6,7 @@ defmodule Polar.Streams.Version do
   alias Polar.Streams.Item
 
   schema "versions" do
+    field :current_state, :string, default: "active"
     field :serial, :string
 
     belongs_to :product, Product

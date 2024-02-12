@@ -16,8 +16,6 @@ defmodule PolarWeb.Router do
 
   scope "/", PolarWeb do
     pipe_through :browser
-
-    get "/", PageController, :home
   end
 
   scope "/streams", PolarWeb.Streams do

@@ -1,4 +1,4 @@
-# Compute Hash for LXD Image
+# Compute Hash for LXD / Incus Image
 
 ## Hash for metadata file
 

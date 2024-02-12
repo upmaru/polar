@@ -2,6 +2,10 @@ defmodule Polar.Streams.Product do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Polar.Streams.Version
+
+  import Ecto.Query, only: [from: 2]
+
   @valid_attrs ~w(
     aliases
     arch
@@ -30,6 +34,8 @@ defmodule Polar.Streams.Product do
     field :requirements, :map, default: %{}
     field :variant, :string, default: "default"
 
+    has_many :active_versions, Version, where: [current_state: "active"]
+
     timestamps(type: :utc_datetime_usec)
   end
 
@@ -38,5 +44,13 @@ defmodule Polar.Streams.Product do
     product
     |> cast(attrs, @valid_attrs)
     |> validate_required(@required_attrs)
+  end
+
+  def filter(:active, queryable) do
+    from(
+      p in queryable,
+      join: v in assoc(p, :active_versions),
+      where: not is_nil(v.product_id)
+    )
   end
 end
