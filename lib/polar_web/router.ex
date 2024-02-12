@@ -27,6 +27,12 @@ defmodule PolarWeb.Router do
     end
   end
 
+  scope "/distribution/:token", as: :distribution do
+    pipe_through :distribution
+
+    forward "/", Polar.Plugs.ImageProxy
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", PolarWeb do
   #   pipe_through :api
