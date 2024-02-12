@@ -39,6 +39,10 @@ defmodule Polar.Streams.Product do
     timestamps(type: :utc_datetime_usec)
   end
 
+  def key(%__MODULE__{os: os, release: release, arch: arch, variant: variant}) do
+    Enum.join([String.downcase(os), release, arch, variant], ":")
+  end
+
   @doc false
   def changeset(product, attrs) do
     product

@@ -18,11 +18,12 @@ defmodule PolarWeb.Router do
     pipe_through :browser
   end
 
-  scope "/streams", PolarWeb.Streams do
+  scope "/streams", PolarWeb do
     pipe_through :api
 
     scope "/v1" do
-      get "/images.json", ImageController, :index
+      get "/index.json", StreamController, :index
+      get "/images.json", Streams.ImageController, :index
     end
   end
 

@@ -61,7 +61,6 @@ defmodule Polar.Streams.Product.ManagerTest do
     end
 
     test "filter only product with active versions", %{
-      without_active_versions: without_active_versions,
       with_active_versions: with_active_versions
     } do
       assert [product] = Streams.list_products([:active])
