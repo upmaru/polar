@@ -22,6 +22,8 @@ config :polar, PolarWeb.Endpoint,
   pubsub_server: Polar.PubSub,
   live_view: [signing_salt: "8KteqLCk"]
 
+config :polar, Polar.Repo, migration_timestamps: [type: :utc_datetime_usec]
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
