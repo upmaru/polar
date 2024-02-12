@@ -11,6 +11,8 @@ defmodule Polar.Repo.Migrations.CreateItems do
 
       add :is_metadata, :boolean, default: false
 
+      add :combined_hashes, {:array, :map}, default: [], null: false
+
       add :version_id, references(:versions, on_delete: :restrict), null: false
 
       timestamps(type: :utc_datetime_usec)

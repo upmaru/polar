@@ -22,7 +22,7 @@ defmodule Polar.Streams.Version.ManagerTest do
 
   describe "create_version" do
     test "can successfully create new version", %{product: product} do
-      assert {:ok, _version} =
+      assert {:ok, version} =
                Streams.create_version(product, %{
                  serial: "20240209_13:00",
                  items: [
@@ -31,7 +31,14 @@ defmodule Polar.Streams.Version.ManagerTest do
                      file_type: "lxd.tar.gz",
                      hash: "35363f3d086271ed5402d61ab18ec03987bed51758c00079b8c9d372ff6d62dd",
                      size: 876,
-                     path: "images/alpine/edge/amd64/default/20240209_13:00/incus.tar.xz"
+                     is_metadata: true,
+                     path: "images/alpine/edge/amd64/default/20240209_13:00/incus.tar.xz",
+                     combined_hashes: [
+                       %{
+                         name: "combined_squashfs_sha256",
+                         hash: "a9f02be498bf52b7bac7b5b1cfceb115878d257ad86a359a969e61fbd4bfe0bf"
+                       }
+                     ]
                    },
                    %{
                      name: "root.squashfs",
