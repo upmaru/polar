@@ -6,6 +6,16 @@ defmodule Polar.Accounts do
   import Ecto.Query, warn: false
   alias Polar.Repo
 
+  alias Polar.Accounts.Space
+
+  defdelegate create_space(owner, params),
+    to: Space.Manager,
+    as: :create
+
+  defdelegate create_space_credential(space, params),
+    to: Space.Manager,
+    as: :create_credential
+
   alias Polar.Accounts.{User, UserToken, UserNotifier}
 
   ## Database getters

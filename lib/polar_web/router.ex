@@ -17,49 +17,10 @@ defmodule PolarWeb.Router do
     plug :accepts, ["json"]
   end
 
-  pipeline :distribution do
-    plug Polar.Plugs.ImageProxy.Identity
-  end
-
   scope "/", PolarWeb do
     pipe_through :browser
-  end
 
-  scope "/spaces/:space_token/streams", PolarWeb do
-    pipe_through :api
-
-    scope "/v1" do
-      get "/index.json", StreamController, :index
-      get "/images.json", Streams.ImageController, :index
-    end
-  end
-
-  scope "/distribution", as: :distribution do
-    pipe_through :distribution
-
-    forward "/", Polar.Plugs.ImageProxy
-  end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", PolarWeb do
-  #   pipe_through :api
-  # end
-
-  # Enable LiveDashboard and Swoosh mailbox preview in development
-  if Application.compile_env(:polar, :dev_routes) do
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
-    import Phoenix.LiveDashboard.Router
-
-    scope "/dev" do
-      pipe_through :browser
-
-      live_dashboard "/dashboard", metrics: PolarWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
-    end
+    get "/", RootController, :show
   end
 
   ## Authentication routes
@@ -97,6 +58,39 @@ defmodule PolarWeb.Router do
       on_mount: [{PolarWeb.UserAuth, :mount_current_user}] do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
+    end
+  end
+
+  scope "/spaces/:space_token/streams", PolarWeb do
+    pipe_through :api
+
+    scope "/v1" do
+      get "/index.json", StreamController, :index
+      get "/images.json", Streams.ImageController, :index
+    end
+  end
+
+  forward "/distribution", Polar.Plugs.ImageProxy
+
+  # Other scopes may use custom stacks.
+  # scope "/api", PolarWeb do
+  #   pipe_through :api
+  # end
+
+  # Enable LiveDashboard and Swoosh mailbox preview in development
+  if Application.compile_env(:polar, :dev_routes) do
+    # If you want to use the LiveDashboard in production, you should put
+    # it behind authentication and allow only admins to access it.
+    # If your application does not have an admins-only section yet,
+    # you can use Plug.BasicAuth to set up some basic authentication
+    # as long as you are also using SSL (which you should anyway).
+    import Phoenix.LiveDashboard.Router
+
+    scope "/dev" do
+      pipe_through :browser
+
+      live_dashboard "/dashboard", metrics: PolarWeb.Telemetry
+      forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
 end

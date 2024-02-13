@@ -8,7 +8,7 @@ defmodule Polar.Accounts.Space do
     field :name, :string
     field :cdn_host, :string
 
-    belongs_to :user, User
+    belongs_to :owner, User
 
     timestamps(type: :utc_datetime)
   end
@@ -17,6 +17,6 @@ defmodule Polar.Accounts.Space do
   def changeset(space, attrs) do
     space
     |> cast(attrs, [:name, :cdn_host])
-    |> validate_required([:name, :cdn_host])
+    |> validate_required([:name])
   end
 end
