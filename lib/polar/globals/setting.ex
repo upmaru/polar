@@ -6,7 +6,7 @@ defmodule Polar.Globals.Setting do
     field :key, :string
     field :value, :map
 
-    timestamps(type: :utc_datetime)
+    timestamps(type: :utc_datetime_usec)
   end
 
   @doc false
