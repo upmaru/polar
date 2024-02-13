@@ -22,7 +22,7 @@ defmodule Polar.Streams.Version.ManagerTest do
 
   describe "create_version" do
     test "can successfully create new version", %{product: product} do
-      assert {:ok, version} =
+      assert {:ok, _version} =
                Streams.create_version(product, %{
                  serial: "20240209_13:00",
                  items: [

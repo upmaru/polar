@@ -21,13 +21,14 @@ defmodule Polar.Accounts.Space.Credential do
   ]
 
   schema "space_credentials" do
-    field :current_state, :string, default: "active"
+    field :current_state, :string, default: "created"
 
     field :token, :binary
     field :access_count, :integer, default: 0
 
+    field :expires_in, :integer, virtual: true
     field :expires_at, :utc_datetime
-    field :last_accessed_at, :utc_datetime
+    field :last_accessed_at, :utc_datetime_usec
 
     belongs_to :space, Space
 
@@ -37,11 +38,27 @@ defmodule Polar.Accounts.Space.Credential do
   def expires_in_range, do: @expires_in_range
 
   @doc false
-  def changeset(space_token, attrs) do
-    space_token
-    |> cast(attrs, [:expires_at])
+  def changeset(credential, attrs) do
+    expires_in_range_values = Enum.map(@expires_in_range, fn r -> r.value end)
+
+    credential
+    |> cast(attrs, [:expires_in])
     |> generate_token()
+    |> validate_inclusion(:expires_in, expires_in_range_values)
     |> validate_required([:token])
+  end
+
+  defp maybe_set_expires_at(changeset) do
+    if expires_in = get_change(changeset, :expires_in) do
+      expires_at =
+        DateTime.utc_now()
+        |> DateTime.truncate(:second)
+        |> DateTime.add(expires_in)
+
+      put_change(changeset, :expires_at, expires_at)
+    else
+      changeset
+    end
   end
 
   defp generate_token(changeset) do

@@ -12,5 +12,6 @@ defmodule Polar.Repo.Migrations.CreateSpaces do
     end
 
     create index(:spaces, [:owner_id])
+    create index(:spaces, [:owner_id, :name], unique: true)
   end
 end

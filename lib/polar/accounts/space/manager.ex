@@ -9,9 +9,23 @@ defmodule Polar.Accounts.Space.Manager do
     |> Repo.insert()
   end
 
-  def create_credential(%Accounts.Space{} = space, params) do
+  def get_credential(token: token) do
+    Repo.get_by(Space.Credential, token: token)
+  end
+
+  def create_credential(%Accounts.Space{} = space, user, params) do
     %Space.Credential{space_id: space.id}
     |> Space.Credential.changeset(params)
     |> Repo.insert()
+    |> case do
+      {:ok, credential} ->
+        {:ok, %{resource: active_credential}} =
+          Eventful.Transit.perform(credential, user, "activate")
+
+        {:ok, active_credential}
+
+      error ->
+        error
+    end
   end
 end

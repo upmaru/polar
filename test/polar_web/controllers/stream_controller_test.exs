@@ -1,10 +1,19 @@
 defmodule PolarWeb.StreamControllerTest do
   use PolarWeb.ConnCase
 
+  alias Polar.Accounts
   alias Polar.Streams
   alias Polar.Streams.Product
 
+  import Polar.AccountsFixtures
+
   setup do
+    user = user_fixture()
+
+    {:ok, space} = Accounts.create_space(user, %{name: "some-test-123"})
+
+    {:ok, credential} = Accounts.create_space_credential(space, user, %{expires_in: 1_296_000})
+
     %Product{} =
       product =
       Streams.get_or_create_product!(%{
@@ -40,11 +49,14 @@ defmodule PolarWeb.StreamControllerTest do
         ]
       })
 
-    {:ok, product: product}
+    {:ok, product: product, credential: credential}
   end
 
-  test "GET /streams/v1/index.json", %{product: product} do
-    conn = get(build_conn(), "/streams/v1/index.json")
+  test "GET /spaces/:space_token/streams/v1/index.json", %{
+    product: product,
+    credential: credential
+  } do
+    conn = get(build_conn(), "/spaces/#{credential.token}/streams/v1/index.json")
 
     assert %{"index" => index} = json_response(conn, 200)
 
@@ -53,5 +65,11 @@ defmodule PolarWeb.StreamControllerTest do
     assert %{"products" => products} = images
 
     assert Product.key(product) in products
+  end
+
+  test "returns 404 due to invalid token" do
+    conn = get(build_conn(), "/spaces/non-existent/streams/v1/index.json")
+
+    assert json_response(conn, 404)
   end
 end
