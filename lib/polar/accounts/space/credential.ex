@@ -45,6 +45,7 @@ defmodule Polar.Accounts.Space.Credential do
     |> cast(attrs, [:expires_in])
     |> generate_token()
     |> validate_inclusion(:expires_in, expires_in_range_values)
+    |> maybe_set_expires_at()
     |> validate_required([:token])
   end
 
