@@ -1,6 +1,7 @@
 defmodule PolarWeb.StreamControllerTest do
   use PolarWeb.ConnCase
 
+  alias Polar.Repo
   alias Polar.Accounts
   alias Polar.Streams
   alias Polar.Streams.Product
@@ -65,6 +66,10 @@ defmodule PolarWeb.StreamControllerTest do
     assert %{"products" => products} = images
 
     assert Product.key(product) in products
+
+    incremented_credential = Repo.reload(credential)
+
+    assert incremented_credential.access_count != credential.access_count
   end
 
   test "returns 404 due to invalid token" do
