@@ -24,6 +24,12 @@ config :polar, PolarWeb.Endpoint,
 
 config :polar, Polar.Repo, migration_timestamps: [type: :utc_datetime_usec]
 
+config :polar, :aws,
+  access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
+  secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
+  region: "auto",
+  bucket: "polar"
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

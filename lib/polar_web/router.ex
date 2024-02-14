@@ -70,7 +70,7 @@ defmodule PolarWeb.Router do
     end
   end
 
-  forward "/distribution", Polar.Plugs.ImageProxy
+  forward "/distribution", PolarWeb.Plugs.ImageProxy
 
   # Other scopes may use custom stacks.
   # scope "/api", PolarWeb do

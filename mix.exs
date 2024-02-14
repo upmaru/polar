@@ -32,6 +32,7 @@ defmodule Polar.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # Base Phoenix
       {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.11"},
       {:phoenix_ecto, "~> 4.4"},
@@ -59,7 +60,19 @@ defmodule Polar.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
-      {:eventful, "~> 3.1"}
+
+      # Event Management
+      {:eventful, "~> 3.1"},
+
+      # Storage
+      {:aws, "~> 0.14.0"},
+      {:aws_signature, "~> 0.3.1"},
+
+      # HTTP Client
+      {:tesla, "~> 1.8.0"},
+
+      # Reverse Proxy
+      {:reverse_proxy_plug, "~> 2.3"}
     ]
   end
 

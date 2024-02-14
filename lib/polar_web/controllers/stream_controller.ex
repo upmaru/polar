@@ -13,8 +13,7 @@ defmodule PolarWeb.StreamController do
     credential = Accounts.get_space_credential(token: space_token)
 
     if credential do
-      from(c in Accounts.Space.Credential, where: c.id == ^credential.id)
-      |> Repo.update_all(inc: [access_count: 1])
+      Accounts.increment_space_credential_access(credential)
 
       products = Streams.list_products([:active])
 

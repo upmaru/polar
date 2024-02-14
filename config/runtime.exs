@@ -20,6 +20,13 @@ if System.get_env("PHX_SERVER") do
   config :polar, PolarWeb.Endpoint, server: true
 end
 
+config :polar, Polar.AWS,
+  access_key_id: System.get_env("AWS_S3_ACCESS_KEY_ID"),
+  secret_access_key: System.get_env("AWS_S3_SECRET_ACCESS_KEY"),
+  region: System.get_env("AWS_S3_REGION"),
+  bucket: System.get_env("AWS_S3_BUCKET"),
+  endpoint: System.get_env("AWS_S3_ENDPOINT")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

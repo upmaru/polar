@@ -20,6 +20,10 @@ defmodule Polar.Accounts do
     to: Space.Manager,
     as: :create_credential
 
+  defdelegate increment_space_credential_access(space_credential),
+    to: Space.Manager,
+    as: :increment_credential_access
+
   alias Polar.Accounts.{User, UserToken, UserNotifier}
 
   ## Database getters
