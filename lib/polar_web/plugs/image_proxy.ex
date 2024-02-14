@@ -1,4 +1,10 @@
 defmodule PolarWeb.Plugs.ImageProxy do
+  import Plug.Conn
+
+  alias Polar.Repo
+  alias Polar.Accounts
+  alias Polar.Accounts.Space
+
   def init(options), do: options
 
   def call(conn, _options) do
@@ -35,5 +41,5 @@ defmodule PolarWeb.Plugs.ImageProxy do
   defp host_valid?(conn, %Space{cdn_host: cdn_host}) when is_binary(cdn_host),
     do: conn.host == cdn_host
 
-  defp host_valid?(conn, %Space{cdn_host: nil}), do: true
+  defp host_valid?(_conn, %Space{cdn_host: nil}), do: true
 end

@@ -4,7 +4,7 @@ defmodule Polar.Globals.Setting do
 
   schema "settings" do
     field :key, :string
-    field :value, :map
+    field :value, :binary
 
     timestamps(type: :utc_datetime_usec)
   end

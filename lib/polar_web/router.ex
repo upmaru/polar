@@ -17,6 +17,10 @@ defmodule PolarWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :publish do
+    plug PolarWeb.Plugs.ValidatePublishing
+  end
+
   scope "/", PolarWeb do
     pipe_through :browser
 
@@ -71,6 +75,14 @@ defmodule PolarWeb.Router do
   end
 
   forward "/distribution", PolarWeb.Plugs.ImageProxy
+
+  scope "/publish", PolarWeb.Publish, as: :publish do
+    resources "/storage", StorageController, only: [:show], singleton: true
+
+    resources "/products", ProductController, only: [:show] do
+      resources "/versions", VersionController, only: [:create]
+    end
+  end
 
   # Other scopes may use custom stacks.
   # scope "/api", PolarWeb do

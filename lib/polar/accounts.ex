@@ -26,6 +26,30 @@ defmodule Polar.Accounts do
 
   alias Polar.Accounts.{User, UserToken, UserNotifier}
 
+  @icepack_user_email "icepak@opsmaru.com"
+
+  def icepak_user do
+    Repo.get_by(User, email: @icepack_user_email)
+    |> case do
+      %User{} = user ->
+        user
+
+      nil ->
+        password =
+          :crypto.strong_rand_bytes(12)
+          |> Base.encode16()
+          |> String.downcase()
+
+        {:ok, user} =
+          register_user(%{
+            email: @icepack_user_email,
+            password: password
+          })
+
+        user
+    end
+  end
+
   ## Database getters
 
   @doc """
