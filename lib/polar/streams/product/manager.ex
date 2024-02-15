@@ -8,22 +8,13 @@ defmodule Polar.Streams.Product.Manager do
     |> Repo.all()
   end
 
-  def get_or_create!(attrs) do
-    Product
-    |> Repo.get_by(
-      arch: attrs.arch,
-      os: attrs.os,
-      release: attrs.release,
-      variant: attrs.variant
-    )
-    |> case do
-      nil ->
-        %Product{}
-        |> Product.changeset(attrs)
-        |> Repo.insert!()
+  def get(attrs) do
+    Repo.get_by(Product, attrs)
+  end
 
-      %Product{} = product ->
-        product
-    end
+  def create(attrs) do
+    %Product{}
+    |> Product.changeset(attrs)
+    |> Repo.insert()
   end
 end

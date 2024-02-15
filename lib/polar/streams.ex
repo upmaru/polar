@@ -5,9 +5,13 @@ defmodule Polar.Streams do
     to: Product.Manager,
     as: :list
 
-  defdelegate get_or_create_product!(attrs),
+  defdelegate get_product(attrs),
     to: Product.Manager,
-    as: :get_or_create!
+    as: :get
+
+  defdelegate create_product(attrs),
+    to: Product.Manager,
+    as: :create
 
   alias __MODULE__.Version
 

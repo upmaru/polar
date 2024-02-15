@@ -15,9 +15,8 @@ defmodule PolarWeb.StreamControllerTest do
 
     {:ok, credential} = Accounts.create_space_credential(space, user, %{expires_in: 1_296_000})
 
-    %Product{} =
-      product =
-      Streams.get_or_create_product!(%{
+    {:ok, %Product{} = product} =
+      Streams.create_product(%{
         aliases: ["alpine/3.18", "alpine/3.18/default"],
         arch: "amd64",
         os: "Alpine",

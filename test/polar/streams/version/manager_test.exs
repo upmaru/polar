@@ -4,8 +4,8 @@ defmodule Polar.Streams.Version.ManagerTest do
   alias Polar.Streams
 
   setup do
-    product =
-      Streams.get_or_create_product!(%{
+    {:ok, product} =
+      Streams.create_product(%{
         aliases: ["alpine/3.19", "alpine/3.19/default"],
         arch: "amd64",
         os: "Alpine",

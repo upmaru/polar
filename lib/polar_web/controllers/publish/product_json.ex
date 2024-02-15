@@ -1,12 +1,11 @@
 defmodule PolarWeb.Publish.ProductJSON do
+  alias Polar.Streams.Product
+
   def show(%{product: product}) do
     %{
       data: %{
         id: product.id,
-        os: product.os,
-        release: product.release,
-        arch: product.arch,
-        variant: product.variant
+        key: Product.key(product)
       }
     }
   end

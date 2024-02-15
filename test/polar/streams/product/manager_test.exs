@@ -4,11 +4,12 @@ defmodule Polar.Streams.Product.ManagerTest do
   alias Polar.Streams
   alias Polar.Streams.Product
 
+  import Polar.StreamsFixtures
+
   describe "filter" do
     setup do
-      %Product{} =
-        without_active_versions =
-        Streams.get_or_create_product!(%{
+      {:ok, %Product{} = without_active_versions} =
+        Streams.create_product(%{
           aliases: ["alpine/3.19", "alpine/3.19/default"],
           arch: "amd64",
           os: "Alpine",
@@ -20,14 +21,13 @@ defmodule Polar.Streams.Product.ManagerTest do
           }
         })
 
-      %Product{} =
-        with_active_versions =
-        Streams.get_or_create_product!(%{
+      {:ok, %Product{} = with_active_versions} =
+        Streams.create_product(%{
           aliases: ["alpine/3.18", "alpine/3.18/default"],
           arch: "amd64",
           os: "Alpine",
-          release: "3.19",
-          release_title: "3.19",
+          release: "3.18",
+          release_title: "3.18",
           variant: "default",
           requirements: %{
             secureboot: false
@@ -69,19 +69,21 @@ defmodule Polar.Streams.Product.ManagerTest do
     end
   end
 
-  describe "get_or_create!" do
-    test "can get or create product" do
+  describe "get/1" do
+    setup do
+      {:ok, %Product{} = _product} =
+        Streams.create_product(valid_product_attributes("alpine:3.19:amd64:default"))
+
+      :ok
+    end
+
+    test "can get product" do
       assert %Product{} =
-               Streams.get_or_create_product!(%{
-                 aliases: ["alpine/3.19", "alpine/3.19/default"],
+               Streams.get_product(%{
                  arch: "amd64",
                  os: "Alpine",
                  release: "3.19",
-                 release_title: "3.19",
-                 variant: "default",
-                 requirements: %{
-                   secureboot: false
-                 }
+                 variant: "default"
                })
     end
   end

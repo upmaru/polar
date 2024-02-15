@@ -1,7 +1,7 @@
 defmodule PolarWeb.Publish.ProductController do
   use PolarWeb, :controller
 
-  alias Polar.Streams.Product
+  alias Polar.Streams
 
   action_fallback PolarWeb.FallbackController
 
@@ -12,13 +12,15 @@ defmodule PolarWeb.Publish.ProductController do
       |> String.split(":")
 
     product =
-      Streams.get_or_create_product!(%{
+      Streams.get_product(%{
         os: os,
         release: release,
         arch: arch,
         variant: variant
       })
 
-    render(conn, :show, %{product: product})
+    if product do
+      render(conn, :show, %{product: product})
+    end
   end
 end
