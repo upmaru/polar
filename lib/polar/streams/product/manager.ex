@@ -9,23 +9,29 @@ defmodule Polar.Streams.Product.Manager do
   end
 
   def get(key) when is_binary(key) do
-    [os, release, arch, variant] =
-      case Base.url_decode64(key) do
-        {:ok, decoded} ->
-          String.split(decoded, ":")
+    key
+    |> Base.url_decode64()
+    |> case do
+      {:ok, decoded} ->
+        String.split(decoded, ":")
 
-        :error ->
-          String.split(key, ":")
-      end
+      :error ->
+        String.split(key, ":")
+    end
+    |> case do
+      [os, release, arch, variant] ->
+        attrs = %{
+          os: os,
+          release: release,
+          arch: arch,
+          variant: variant
+        }
 
-    attrs = %{
-      os: os,
-      release: release,
-      arch: arch,
-      variant: variant
-    }
+        get(attrs)
 
-    get(attrs)
+      _ ->
+        nil
+    end
   end
 
   def get(attrs) when is_map(attrs) do
