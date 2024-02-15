@@ -24,31 +24,19 @@ defmodule Polar.Accounts do
     to: Space.Manager,
     as: :increment_credential_access
 
-  alias Polar.Accounts.{User, UserToken, UserNotifier}
+  alias Polar.Accounts.Automation
 
-  @icepack_user_email "icepak@opsmaru.com"
+  defdelegate generate_automation_password,
+    to: Automation,
+    as: :generate_password
 
-  def icepak_user do
-    Repo.get_by(User, email: @icepack_user_email)
-    |> case do
-      %User{} = user ->
-        user
+  defdelegate create_automation_bot(password),
+    to: Automation,
+    as: :create_bot
 
-      nil ->
-        password =
-          :crypto.strong_rand_bytes(12)
-          |> Base.encode16()
-          |> String.downcase()
-
-        {:ok, user} =
-          register_user(%{
-            email: @icepack_user_email,
-            password: password
-          })
-
-        user
-    end
-  end
+  alias Polar.Accounts.User
+  alias Polar.Accounts.UserToken
+  alias Polar.Accounts.UserNotifier
 
   ## Database getters
 

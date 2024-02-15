@@ -77,10 +77,18 @@ defmodule PolarWeb.Router do
   forward "/distribution", PolarWeb.Plugs.ImageProxy
 
   scope "/publish", PolarWeb.Publish, as: :publish do
-    resources "/storage", StorageController, only: [:show], singleton: true
+    pipe_through :api
 
-    resources "/products", ProductController, only: [:show] do
-      resources "/versions", VersionController, only: [:create]
+    resources "/sessions", SessionController, only: [:create]
+
+    scope "/" do
+      pipe_through :publish
+
+      resources "/storage", StorageController, only: [:show], singleton: true
+
+      resources "/products", ProductController, only: [:show] do
+        resources "/versions", VersionController, only: [:create]
+      end
     end
   end
 

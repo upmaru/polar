@@ -48,6 +48,7 @@ defmodule Polar.Streams.Product do
     product
     |> cast(attrs, @valid_attrs)
     |> validate_required(@required_attrs)
+    |> validate_inclusion(:arch, ["arm64", "amd64"])
   end
 
   def filter(:active, queryable) do

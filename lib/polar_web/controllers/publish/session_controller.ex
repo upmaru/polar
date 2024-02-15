@@ -11,9 +11,13 @@ defmodule PolarWeb.Publish.SessionController do
     %{"password" => password} = user_params
 
     if user = Accounts.get_user_by_email_and_password(email, password) do
-      session_token = Accounts.generate_user_session_token(user)
+      session_token =
+        Accounts.generate_user_session_token(user)
+        |> Base.encode64()
 
-      render(conn, :create, %{token: session_token})
+      conn
+      |> put_status(:created)
+      |> render(:create, %{token: session_token})
     else
       {:error, :unauthorized}
     end

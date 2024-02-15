@@ -4,6 +4,8 @@ defmodule Polar.AccountsFixtures do
   entities via the `Polar.Accounts` context.
   """
 
+  alias Polar.Accounts.Automation
+
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
 
@@ -21,6 +23,12 @@ defmodule Polar.AccountsFixtures do
       |> Polar.Accounts.register_user()
 
     user
+  end
+
+  def bot_fixture(attrs \\ %{}) do
+    {:ok, bot} = Automation.create_bot(attrs.password)
+
+    bot
   end
 
   def extract_user_token(fun) do

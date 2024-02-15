@@ -8,6 +8,8 @@ defmodule PolarWeb.Plugs.ValidatePublishing do
   def call(conn, _options) do
     [token] = get_req_header(conn, "authorization")
 
+    token = Base.decode64!(token)
+
     if user = Accounts.get_user_by_session_token(token) do
       assign(conn, :current_user, user)
     else
