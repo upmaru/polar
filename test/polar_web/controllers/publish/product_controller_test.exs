@@ -25,6 +25,19 @@ defmodule PolarWeb.Publish.ProductControllerTest do
     {:ok, conn: conn}
   end
 
+  describe "unauthenticated" do
+    test "returns unauthenticated" do
+      id =
+        ["alpine", "3.19", "amd64", "default"]
+        |> Enum.join(":")
+        |> Base.url_encode64()
+
+      conn = get(build_conn(), "/publish/products/#{id}")
+
+      assert json_response(conn, 401)
+    end
+  end
+
   describe "GET /publish/products/:id" do
     setup do
       product_attributes = valid_product_attributes("alpine:3.19:amd64:default")

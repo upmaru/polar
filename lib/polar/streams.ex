@@ -13,6 +13,10 @@ defmodule Polar.Streams do
     to: Product.Manager,
     as: :create
 
+  defdelegate update_product(product, attrs),
+    to: Product.Manager,
+    as: :update
+
   alias __MODULE__.Version
 
   defdelegate create_version(product, attrs),
