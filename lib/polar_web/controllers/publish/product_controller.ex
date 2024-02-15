@@ -6,18 +6,7 @@ defmodule PolarWeb.Publish.ProductController do
   action_fallback PolarWeb.FallbackController
 
   def show(conn, %{"id" => product_key}) do
-    [os, release, arch, variant] =
-      product_key
-      |> Base.url_decode64!()
-      |> String.split(":")
-
-    product =
-      Streams.get_product(%{
-        os: os,
-        release: release,
-        arch: arch,
-        variant: variant
-      })
+    product = Streams.get_product(product_key)
 
     if product do
       render(conn, :show, %{product: product})
