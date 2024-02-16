@@ -8,8 +8,6 @@ defmodule Polar.AWS do
       endpoint: endpoint
     } = config()
 
-    scheme = Keyword.get(opts, :scheme, "https://")
-
     datetime = :erlang.universaltime()
     method = "GET"
 

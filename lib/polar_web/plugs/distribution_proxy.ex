@@ -21,7 +21,7 @@ defmodule PolarWeb.Plugs.DistributionProxy do
 
       item = Repo.get!(Item, item_id)
 
-      signed_url = Polar.AWS.get_signed_url(item.path, scheme: "http://")
+      signed_url = Polar.AWS.get_signed_url(item.path)
 
       tesla_client =
         Tesla.client([
