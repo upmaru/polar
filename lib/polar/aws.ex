@@ -13,7 +13,7 @@ defmodule Polar.AWS do
     datetime = :erlang.universaltime()
     method = "GET"
 
-    url = Enum.join([scheme, endpoint, "/", bucket, "/", object_path])
+    url = Enum.join([scheme, "#{endpoint}:9000", "/", bucket, "/", object_path])
 
     signed_url =
       :aws_signature.sign_v4_query_params(

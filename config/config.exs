@@ -24,11 +24,9 @@ config :polar, PolarWeb.Endpoint,
 
 config :polar, Polar.Repo, migration_timestamps: [type: :utc_datetime_usec]
 
-config :polar, :aws,
-  access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
-  secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
-  region: "auto",
-  bucket: "polar"
+config :reverse_proxy_plug, :http_client, ReverseProxyPlug.HTTPClient.Adapters.Tesla
+
+config :tesla, :adapter, {Tesla.Adapter.Finch, name: Polar.Finch}
 
 # Configures the mailer
 #

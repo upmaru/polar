@@ -65,16 +65,18 @@ defmodule PolarWeb.Router do
     end
   end
 
-  scope "/spaces/:space_token/streams", PolarWeb do
+  scope "/spaces/:space_token/flavors/:flavor", PolarWeb do
     pipe_through :api
 
-    scope "/v1" do
+    scope "/streams/v1" do
       get "/index.json", StreamController, :index
       get "/images.json", Streams.ImageController, :index
     end
+
+    resources "/items", Streams.ItemController, only: [:show]
   end
 
-  forward "/distribution", PolarWeb.Plugs.ImageProxy
+  forward "/distributions", PolarWeb.Plugs.DistributionProxy
 
   scope "/publish", PolarWeb.Publish, as: :publish do
     pipe_through :api

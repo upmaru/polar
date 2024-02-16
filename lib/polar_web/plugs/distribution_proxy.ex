@@ -1,14 +1,16 @@
-defmodule PolarWeb.Plugs.ImageProxy do
+defmodule PolarWeb.Plugs.DistributionProxy do
   import Plug.Conn
 
   alias Polar.Repo
   alias Polar.Accounts
   alias Polar.Accounts.Space
 
+  alias Polar.Streams.Item
+
   def init(options), do: options
 
   def call(conn, _options) do
-    {space_token, object_segments} = List.pop_at(conn.path_info, 0)
+    {space_token, ["items", item_id]} = List.pop_at(conn.path_info, 0)
 
     credential =
       Accounts.get_space_credential(token: space_token)
@@ -17,12 +19,17 @@ defmodule PolarWeb.Plugs.ImageProxy do
     if credential && host_valid?(conn, credential.space) do
       Accounts.increment_space_credential_access(credential)
 
-      signed_url =
-        object_segments
-        |> Enum.join("/")
-        |> Polar.AWS.get_signed_url()
+      item = Repo.get!(Item, item_id)
 
-      reverse_proxy_options = ReverseProxyPlug.init(upstream: signed_url)
+      signed_url = Polar.AWS.get_signed_url(item.path, scheme: "http://")
+
+      tesla_client =
+        Tesla.client([
+          Tesla.Middleware.Logger
+        ])
+
+      reverse_proxy_options =
+        ReverseProxyPlug.init(upstream: signed_url, client_options: [tesla_client: tesla_client])
 
       conn
       |> Map.put(:path_info, [])

@@ -47,6 +47,7 @@ defmodule Polar.Streams.Product do
   def changeset(product, attrs) do
     product
     |> cast(attrs, @valid_attrs)
+    |> maybe_set_release_title()
     |> validate_required(@required_attrs)
     |> validate_inclusion(:arch, ["arm64", "amd64"])
   end
@@ -57,5 +58,16 @@ defmodule Polar.Streams.Product do
       join: v in assoc(p, :active_versions),
       where: not is_nil(v.product_id)
     )
+  end
+
+  defp maybe_set_release_title(changeset) do
+    if release = get_change(changeset, :release) do
+      case fetch_field(changeset, :release_title) do
+        {_, nil} -> put_change(changeset, :release_title, release)
+        _ -> changeset
+      end
+    else
+      changeset
+    end
   end
 end
