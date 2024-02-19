@@ -1,0 +1,152 @@
+name: 'CI'
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - 'feature/**'
+      - 'hotfix/**'
+
+jobs:
+  deps:
+    name: Dependencies
+    runs-on: warp-ubuntu-latest-x64-2x
+    container:
+      image: alpine:3.19
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install OS Deps
+        run: |
+          apk update && apk add --update tar build-base libsodium-dev \
+            elixir nodejs npm git erlang-dialyzer
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v4
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+          key: ${{ runner.os }}-polar-${{ hashFiles('mix.lock') }}
+
+      - name: Install Dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p priv/plts
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+          mix deps.compile
+          MIX_ENV=test mix deps.compile
+          mix dialyzer --plt
+
+  static_code_analysis:
+    name: Static Code Analysis
+    needs: deps
+    runs-on: warp-ubuntu-latest-x64-2x
+    container:
+      image: alpine:3.19
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Dependencies
+        run: |
+          apk update && apk add --update tar build-base libsodium-dev \
+            elixir nodejs npm git erlang-dialyzer
+
+          mix local.rebar --force
+          mix local.hex --force
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v4
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+
+          key: ${{ runner.os }}-polar-${{ hashFiles('mix.lock') }}
+
+      - name: Check Code Format
+        run: mix format --check-formatted
+
+      - name: Run Dialyzer
+        run: mix dialyzer --no-check --halt-exit-status
+
+  test:
+    name: Unit Tests
+    needs: deps
+    runs-on: warp-ubuntu-latest-x64-2x
+    container:
+      image: alpine:3.19
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Dependencies
+        run: |
+          apk update && apk add --update tar build-base libsodium-dev \
+            elixir nodejs npm git erlang-dialyzer
+
+          mix local.rebar --force
+          mix local.hex --force
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v4
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+          key: ${{ runner.os }}-polar-${{ hashFiles('mix.lock') }}
+
+      - name: Run Tests
+        run: mix test --trace --slowest 10
+        env:
+          POSTGRES_HOST: postgres
+          POSTGRES_USERNAME: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
