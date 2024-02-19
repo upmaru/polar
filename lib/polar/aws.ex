@@ -1,5 +1,5 @@
 defmodule Polar.AWS do
-  def get_signed_url(object_path, opts \\ [ttl: 86_400]) do
+  def get_signed_url(object_path, opts \\ [ttl: 3600, body_digest: "UNSIGNED-PAYLOAD"]) do
     %{
       access_key_id: access_key_id,
       secret_access_key: secret_access_key,
@@ -11,7 +11,7 @@ defmodule Polar.AWS do
     datetime = :erlang.universaltime()
     method = "GET"
 
-    url = Enum.join([scheme, "#{endpoint}:9000", "/", bucket, "/", object_path])
+    url = Path.join(["https://", endpoint, bucket, object_path])
 
     signed_url =
       :aws_signature.sign_v4_query_params(

@@ -65,7 +65,7 @@ defmodule PolarWeb.Router do
     end
   end
 
-  scope "/spaces/:space_token/flavors/:flavor", PolarWeb do
+  scope "/spaces/:space_token", PolarWeb do
     pipe_through :api
 
     scope "/streams/v1" do

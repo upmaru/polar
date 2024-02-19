@@ -19,5 +19,7 @@ defmodule Polar.Repo.Migrations.CreateItems do
     end
 
     create index(:items, [:version_id])
+    create index(:items, [:name, :hash], unique: true, where: "is_metadata = true")
+    create index(:items, [:hash], unique: true, where: "is_metadata = false")
   end
 end

@@ -7,8 +7,7 @@ defmodule PolarWeb.Streams.ImageController do
 
   action_fallback PolarWeb.FallbackController
 
-  def index(conn, %{"space_token" => space_token, "flavor" => flavor})
-      when flavor in ["lxd", "incus"] do
+  def index(conn, %{"space_token" => space_token}) do
     credential = Accounts.get_space_credential(token: space_token)
 
     if credential do
@@ -18,7 +17,7 @@ defmodule PolarWeb.Streams.ImageController do
         Streams.list_products([:active])
         |> Repo.preload(active_versions: [:items])
 
-      render(conn, :index, %{products: products, flavor: flavor})
+      render(conn, :index, %{products: products, credential: credential})
     end
   end
 

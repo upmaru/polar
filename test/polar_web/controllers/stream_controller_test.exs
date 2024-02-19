@@ -13,7 +13,8 @@ defmodule PolarWeb.StreamControllerTest do
 
     {:ok, space} = Accounts.create_space(user, %{name: "some-test-123"})
 
-    {:ok, credential} = Accounts.create_space_credential(space, user, %{expires_in: 1_296_000})
+    {:ok, credential} =
+      Accounts.create_space_credential(space, user, %{expires_in: 1_296_000, type: "lxd"})
 
     {:ok, %Product{} = product} =
       Streams.create_product(%{

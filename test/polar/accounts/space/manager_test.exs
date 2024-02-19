@@ -26,7 +26,7 @@ defmodule Polar.Accounts.Space.ManagerTest do
 
     test "create credential for space", %{space: space, user: user} do
       assert {:ok, credential} =
-               Accounts.create_space_credential(space, user, %{expires_in: 1_296_000})
+               Accounts.create_space_credential(space, user, %{expires_in: 1_296_000, type: "lxd"})
 
       assert byte_size(credential.token) == 24
     end

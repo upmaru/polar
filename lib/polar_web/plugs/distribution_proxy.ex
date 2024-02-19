@@ -23,13 +23,14 @@ defmodule PolarWeb.Plugs.DistributionProxy do
 
       signed_url = Polar.AWS.get_signed_url(item.path)
 
-      tesla_client =
-        Tesla.client([
-          Tesla.Middleware.Logger
-        ])
+      tesla_client = Tesla.client([])
 
       reverse_proxy_options =
-        ReverseProxyPlug.init(upstream: signed_url, client_options: [tesla_client: tesla_client])
+        ReverseProxyPlug.init(
+          upstream: signed_url,
+          response_mode: :buffer,
+          client_options: [tesla_client: tesla_client]
+        )
 
       conn
       |> Map.put(:path_info, [])

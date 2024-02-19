@@ -5,13 +5,13 @@ defmodule PolarWeb.Streams.ImageJSON do
 
   alias Polar.Streams.Product
 
-  def index(%{products: products, flavor: flavor}) do
+  def index(%{products: products, credential: credential}) do
     %{
       content_id: "images",
       datatype: "image-downloads",
       format: "products:1.0",
       products:
-        Enum.map(products, &render_product(&1, %{flavor: flavor}))
+        Enum.map(products, &render_product(&1, %{credential: credential}))
         |> Enum.into(%{})
     }
   end
@@ -39,7 +39,7 @@ defmodule PolarWeb.Streams.ImageJSON do
     {version.serial, version_attributes(version, params)}
   end
 
-  defp version_attributes(version, %{flavor: flavor}) do
+  defp version_attributes(version, %{credential: credential}) do
     metadata_items =
       Enum.filter(version.items, fn item ->
         item.is_metadata
@@ -52,7 +52,7 @@ defmodule PolarWeb.Streams.ImageJSON do
 
     metadata =
       Enum.find(metadata_items, fn item ->
-        item.name =~ flavor
+        item.name =~ credential.type
       end)
 
     %{

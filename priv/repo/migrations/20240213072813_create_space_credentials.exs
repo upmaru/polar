@@ -4,6 +4,7 @@ defmodule Polar.Repo.Migrations.CreateSpacesToken do
   def change do
     create table(:space_credentials) do
       add :current_state, :citext, default: "created", null: false
+      add :type, :citext, null: false
 
       add :token, :binary, null: false
       add :expires_at, :utc_datetime

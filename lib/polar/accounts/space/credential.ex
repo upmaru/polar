@@ -26,6 +26,8 @@ defmodule Polar.Accounts.Space.Credential do
     field :token, :binary
     field :access_count, :integer, default: 0
 
+    field :type, :string
+
     field :expires_in, :integer, virtual: true
     field :expires_at, :utc_datetime
     field :last_accessed_at, :utc_datetime_usec
@@ -42,9 +44,10 @@ defmodule Polar.Accounts.Space.Credential do
     expires_in_range_values = Enum.map(@expires_in_range, fn r -> r.value end)
 
     credential
-    |> cast(attrs, [:expires_in])
+    |> cast(attrs, [:expires_in, :type])
     |> generate_token()
     |> validate_inclusion(:expires_in, expires_in_range_values)
+    |> validate_inclusion(:type, ["lxd", "incus"])
     |> maybe_set_expires_at()
     |> validate_required([:token])
   end
