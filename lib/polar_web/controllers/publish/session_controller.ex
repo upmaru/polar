@@ -1,6 +1,8 @@
 defmodule PolarWeb.Publish.SessionController do
   use PolarWeb, :controller
 
+  alias Polar.Repo
+
   alias Polar.Accounts
   alias Polar.Accounts.Automation
 
@@ -11,6 +13,8 @@ defmodule PolarWeb.Publish.SessionController do
     %{"password" => password} = user_params
 
     if user = Accounts.get_user_by_email_and_password(email, password) do
+      Repo.delete_all(Accounts.UserToken.by_user_and_contexts_query(user, :all))
+
       session_token =
         Accounts.generate_user_session_token(user)
         |> Base.encode64()

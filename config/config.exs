@@ -24,10 +24,6 @@ config :polar, PolarWeb.Endpoint,
 
 config :polar, Polar.Repo, migration_timestamps: [type: :utc_datetime_usec]
 
-config :reverse_proxy_plug, :http_client, ReverseProxyPlug.HTTPClient.Adapters.Tesla
-
-config :tesla, :adapter, {Tesla.Adapter.Finch, name: Polar.Finch}
-
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

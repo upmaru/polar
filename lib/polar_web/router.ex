@@ -76,8 +76,6 @@ defmodule PolarWeb.Router do
     resources "/items", Streams.ItemController, only: [:show]
   end
 
-  forward "/distributions", PolarWeb.Plugs.DistributionProxy
-
   scope "/publish", PolarWeb.Publish, as: :publish do
     pipe_through :api
 

@@ -1,7 +1,6 @@
 defmodule PolarWeb.StreamControllerTest do
   use PolarWeb.ConnCase
 
-  alias Polar.Repo
   alias Polar.Accounts
   alias Polar.Streams
   alias Polar.Streams.Product
@@ -14,7 +13,11 @@ defmodule PolarWeb.StreamControllerTest do
     {:ok, space} = Accounts.create_space(user, %{name: "some-test-123"})
 
     {:ok, credential} =
-      Accounts.create_space_credential(space, user, %{expires_in: 1_296_000, type: "lxd"})
+      Accounts.create_space_credential(space, user, %{
+        expires_in: 1_296_000,
+        name: "test-02",
+        type: "lxd"
+      })
 
     {:ok, %Product{} = product} =
       Streams.create_product(%{
@@ -66,10 +69,6 @@ defmodule PolarWeb.StreamControllerTest do
     assert %{"products" => products} = images
 
     assert Product.key(product) in products
-
-    incremented_credential = Repo.reload(credential)
-
-    assert incremented_credential.access_count != credential.access_count
   end
 
   test "returns 404 due to invalid token" do

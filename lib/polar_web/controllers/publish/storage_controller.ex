@@ -4,7 +4,7 @@ defmodule PolarWeb.Publish.StorageController do
   action_fallback PolarWeb.FallbackController
 
   def show(%{assigns: %{current_user: _current_user}} = conn, _params) do
-    config = Polar.AWS.config()
+    config = Polar.Assets.config()
 
     render(conn, :show, %{storage: config})
   end
