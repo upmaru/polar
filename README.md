@@ -10,3 +10,11 @@ Polar is an image server for LXD / Incus. It has some useful features like
 ## Basic Architecture
 
 ![basic design](/design.png)
+
+## Development
+
+Clone the repository and start the server with 
+
+```elixir
+iex -S mix phx.server
+```
