@@ -1,0 +1,32 @@
+# Product Management
+
+## Create
+
+```elixir
+{:ok, product} =
+  Polar.Streams.create_product(%{
+    aliases: ["alpine/3.19", "alpine/3.19/default"],
+    arch: "arm64",
+    os: "alpine",
+    release: "3.19",
+    variant: "default",
+    requirements: %{
+      "secureboot" => "false"
+    }
+  })
+```
+
+## Get
+
+```elixir
+product = Polar.Streams.get_product("alpine:3.19:arm64:default")
+```
+
+## Update
+
+```elixir
+product = Polar.Streams.get_product("alpine:3.19:arm64:default")
+
+{:ok, product} =
+  Polar.Streams.update_product(product, %{requirements: %{"secureboot" => "false"}})
+```

@@ -1,0 +1,11 @@
+# Global Bot
+
+## Create Bot
+
+```elixir
+password = Polar.Accounts.Automation.generate_password()
+```
+
+```elixir
+Polar.Accounts.Automation.create_bot(password)
+```

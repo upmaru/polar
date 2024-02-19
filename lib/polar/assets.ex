@@ -1,5 +1,8 @@
-defmodule Polar.AWS do
-  def get_signed_url(object_path, opts \\ [ttl: 3600, body_digest: "UNSIGNED-PAYLOAD"]) do
+defmodule Polar.Assets do
+  def get_signed_url(
+        object_path,
+        opts \\ [ttl: 3600, body_digest: "UNSIGNED-PAYLOAD"]
+      ) do
     %{
       access_key_id: access_key_id,
       secret_access_key: secret_access_key,

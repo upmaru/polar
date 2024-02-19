@@ -66,13 +66,7 @@ defmodule Polar.MixProject do
 
       # Storage
       {:aws, "~> 0.14.0"},
-      {:aws_signature, "~> 0.3.1"},
-
-      # HTTP Client
-      {:tesla, "~> 1.8.0"},
-
-      # Reverse Proxy
-      {:reverse_proxy_plug, "~> 2.3"}
+      {:aws_signature, "~> 0.3.1"}
     ]
   end
 

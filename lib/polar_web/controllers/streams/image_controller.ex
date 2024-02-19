@@ -11,8 +11,6 @@ defmodule PolarWeb.Streams.ImageController do
     credential = Accounts.get_space_credential(token: space_token)
 
     if credential do
-      Accounts.increment_space_credential_access(credential)
-
       products =
         Streams.list_products([:active])
         |> Repo.preload(active_versions: [:items])
