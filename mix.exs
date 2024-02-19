@@ -66,7 +66,10 @@ defmodule Polar.MixProject do
 
       # Storage
       {:aws, "~> 0.14.0"},
-      {:aws_signature, "~> 0.3.1"}
+      {:aws_signature, "~> 0.3.1"},
+
+      # Dev / Test
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
   end
 
