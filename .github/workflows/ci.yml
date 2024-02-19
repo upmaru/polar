@@ -11,7 +11,7 @@ on:
 jobs:
   deps:
     name: Dependencies
-    runs-on: warp-ubuntu-latest-x64-2x
+    runs-on: ubuntu-latest
     container:
       image: alpine:3.19
 
@@ -55,7 +55,7 @@ jobs:
   static_code_analysis:
     name: Static Code Analysis
     needs: deps
-    runs-on: warp-ubuntu-latest-x64-2x
+    runs-on: ubuntu-latest
     container:
       image: alpine:3.19
 
@@ -98,7 +98,7 @@ jobs:
   test:
     name: Unit Tests
     needs: deps
-    runs-on: warp-ubuntu-latest-x64-2x
+    runs-on: ubuntu-latest
     container:
       image: alpine:3.19
 
