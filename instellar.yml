@@ -1,0 +1,84 @@
+dependencies:
+  build:
+    - elixir
+    - npm
+  runtime:
+    - bash
+    - curl
+    - s6
+    - jq
+    - ca-certificates
+    - polar-openrc
+  trace: true
+
+stack: alpine/3.19
+
+build:
+  command: |
+    export MIX_ENV=prod
+
+    mix local.hex --force
+    mix local.rebar --force
+    mix do deps.get --only prod
+
+    # npm --prefix ./assets install ./assets
+
+    # Comment out mix assets.deploy for non phoenix apps
+    mix assets.deploy
+
+    mix release
+  destination:
+    - _build/prod/rel/polar/*
+
+run:
+  commands:
+    - binary: polar
+      call: eval 'Polar.Release.migrate'
+      name: migrate
+    - binary: polar
+      call: remote
+      name: console
+    - binary: tail
+      call: -f -n 100 /var/log/polar/current
+      name: logs
+      path: /usr/bin
+  name: polar
+  services:
+    - binary: polar
+      name: web
+      start:
+        call: start
+
+hook:
+  post-deinstall: |
+    rc-service polar stop
+    rc-update del polar
+  post-install: |
+    rc-update add polar
+    rc-service polar migrate
+  post-upgrade: |
+    rc-service polar migrate
+    rc-service polar start
+  pre-upgrade: |
+    rc-service polar stop
+
+kits:
+  - description: Web service
+    main: true
+    name: web
+    ports:
+      - main: true
+        name: web
+        target: 4000
+    variables:
+      - default_value: 'true'
+        key: PHX_SERVER
+      - driver: generic/secret
+        driver_options:
+          length: 128
+        key: SECRET_KEY_BASE
+      - default_value: ecto:///
+        driver: database/postgresql
+        key: DATABASE
+      - driver: bucket/aws-s3
+        key: AWS_S3
