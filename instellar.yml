@@ -80,3 +80,5 @@ kits:
       - default_value: ecto:///
         driver: database/postgresql
         key: DATABASE
+      - driver: bucket/aws-s3
+        key: AWS_S3
