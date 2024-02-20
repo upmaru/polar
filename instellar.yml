@@ -27,7 +27,7 @@ build:
     mix assets.deploy
 
     mix release
-  destination:
+  destinations:
     - _build/prod/rel/polar/*
 
 run:
