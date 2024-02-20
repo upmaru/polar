@@ -61,7 +61,7 @@ if config_env() == :prod do
         ]
       end
 
-    config :instellar, Instellar.Repo,
+    config :polar, Polar.Repo,
       ssl: true,
       url: database_url,
       ssl_opts:
@@ -74,7 +74,7 @@ if config_env() == :prod do
         ]
         |> Keyword.merge(cacert_options)
   else
-    config :instellar, Instellar.Repo,
+    config :polar, Polar.Repo,
       url: database_url,
       socket_options: maybe_ipv6
   end
