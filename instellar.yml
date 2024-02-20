@@ -33,7 +33,7 @@ build:
 run:
   commands:
     - binary: polar
-      call: eval 'Polar.Release.Tasks.migrate'
+      call: eval 'Polar.Release.migrate'
       name: migrate
     - binary: polar
       call: remote
