@@ -68,6 +68,9 @@ defmodule Polar.MixProject do
       {:aws, "~> 0.14.0"},
       {:aws_signature, "~> 0.3.1"},
 
+      # Cert
+      {:x509, "~> 0.8"},
+
       # Dev / Test
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
