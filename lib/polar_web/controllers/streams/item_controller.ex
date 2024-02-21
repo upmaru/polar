@@ -12,7 +12,6 @@ defmodule PolarWeb.Streams.ItemController do
 
     if credential do
       %{
-        bucket: bucket,
         default_cdn_host: default_cdn_host
       } = Polar.Assets.config()
 

@@ -19,6 +19,10 @@
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
+    <%= if domain = System.get_env("PHX_HOST") do %>
+      <script defer data-domain={domain} src="https://plausible.io/js/script.js">
+      </script>
+    <% end %>
   </head>
   <body class="h-full bg-slate-950">
     <%= @inner_content %>
