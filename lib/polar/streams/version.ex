@@ -5,6 +5,8 @@ defmodule Polar.Streams.Version do
   alias Polar.Streams.Product
   alias Polar.Streams.Item
 
+  import Ecto.Query, only: [from: 2]
+
   schema "versions" do
     field :current_state, :string, default: "active"
     field :serial, :string
@@ -22,5 +24,28 @@ defmodule Polar.Streams.Version do
     |> cast(attrs, [:serial])
     |> validate_required([:serial])
     |> cast_assoc(:items, required: true)
+  end
+
+  def latest_version_by_product(count \\ 1) do
+    ranking_query =
+      from(
+        i in __MODULE__,
+        select: %{
+          id: i.id,
+          row_number: over(row_number(), :products_partition)
+        },
+        windows: [
+          products_partition: [
+            partition_by: :product_id,
+            order_by: [desc: :inserted_at]
+          ]
+        ]
+      )
+
+    from(
+      i in __MODULE__,
+      join: r in subquery(ranking_query),
+      on: i.id == r.id and r.row_number <= ^count
+    )
   end
 end

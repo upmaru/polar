@@ -1,8 +1,6 @@
 defmodule PolarWeb.Publish.SessionController do
   use PolarWeb, :controller
 
-  alias Polar.Repo
-
   alias Polar.Accounts
   alias Polar.Accounts.Automation
 

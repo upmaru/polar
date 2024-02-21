@@ -4,7 +4,7 @@ defmodule Polar.Streams.Product.Manager do
 
   def list(scopes) do
     scopes
-    |> Enum.reduce(Product, &Product.filter/2)
+    |> Enum.reduce(Product, &Product.scope/2)
     |> Repo.all()
   end
 

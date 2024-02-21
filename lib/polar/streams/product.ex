@@ -34,6 +34,8 @@ defmodule Polar.Streams.Product do
     field :requirements, :map, default: %{}
     field :variant, :string, default: "default"
 
+    has_one :latest_version, Version, where: [current_state: "active"]
+
     has_many :active_versions, Version, where: [current_state: "active"]
 
     timestamps(type: :utc_datetime_usec)
@@ -52,11 +54,18 @@ defmodule Polar.Streams.Product do
     |> validate_inclusion(:arch, ["arm64", "amd64"])
   end
 
-  def filter(:active, queryable) do
+  def scope(:active, queryable) do
     from(
       p in queryable,
       join: v in assoc(p, :active_versions),
       where: not is_nil(v.product_id)
+    )
+  end
+
+  def scope(:with_latest_version, queryable) do
+    from(
+      p in queryable,
+      preload: [latest_version: ^Version.latest_version_by_product()]
     )
   end
 
