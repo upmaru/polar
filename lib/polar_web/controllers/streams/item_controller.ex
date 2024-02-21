@@ -20,7 +20,7 @@ defmodule PolarWeb.Streams.ItemController do
 
       endpoint = credential.space.cdn_host || default_cdn_host
 
-      url = Path.join(["https://", endpoint, bucket, item.path])
+      url = Path.join(["https://", endpoint, item.path])
 
       redirect(conn, external: url)
     end

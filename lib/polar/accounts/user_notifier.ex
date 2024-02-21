@@ -5,10 +5,12 @@ defmodule Polar.Accounts.UserNotifier do
 
   # Delivers the email using the application mailer.
   defp deliver(recipient, subject, body) do
+    notifier = System.get_env("NOTIFIER_EMAIL", "images@opsmaru.com")
+
     email =
       new()
       |> to(recipient)
-      |> from({"Polar", "contact@example.com"})
+      |> from({"OpsMaru Image Server", notifier})
       |> subject(subject)
       |> text_body(body)
 
