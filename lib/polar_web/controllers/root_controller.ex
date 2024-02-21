@@ -8,6 +8,6 @@ defmodule PolarWeb.RootController do
       Streams.list_products([:active, :with_latest_version])
       |> Enum.group_by(fn p -> {p.os, p.release} end)
 
-    render(conn, :show, layout: false, grouped_products: products)
+    render(conn, :show, page_title: gettext("OpsMaru Images"), grouped_products: products)
   end
 end
