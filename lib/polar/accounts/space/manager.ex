@@ -12,7 +12,8 @@ defmodule Polar.Accounts.Space.Manager do
   end
 
   def get_credential(token: token) do
-    Repo.get_by(Space.Credential, token: token)
+    Space.Credential.scope(:active, Space.Credential)
+    |> Repo.get_by(token: token)
   end
 
   def create_credential(%Accounts.Space{} = space, user, params) do
@@ -28,6 +29,20 @@ defmodule Polar.Accounts.Space.Manager do
 
       error ->
         error
+    end
+  end
+
+  def credential_valid?(nil), do: false
+
+  def credential_valid?(%Space.Credential{expires_at: expires_at} = credential) do
+    if is_nil(expires_at) || DateTime.compare(expires_at, DateTime.utc_now()) == :gt do
+      true
+    else
+      bot = Accounts.Automation.get_bot!()
+
+      Eventful.Transit.perform(credential, bot, "expire")
+
+      false
     end
   end
 

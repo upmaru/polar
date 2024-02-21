@@ -20,6 +20,10 @@ defmodule Polar.Accounts do
     to: Space.Manager,
     as: :create_credential
 
+  defdelegate space_credential_valid?(credential),
+    to: Space.Manager,
+    as: :credential_valid?
+
   alias Polar.Accounts.Automation
 
   defdelegate generate_automation_password,

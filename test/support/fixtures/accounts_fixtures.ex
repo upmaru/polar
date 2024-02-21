@@ -25,7 +25,7 @@ defmodule Polar.AccountsFixtures do
     user
   end
 
-  def bot_fixture(attrs \\ %{}) do
+  def bot_fixture(attrs \\ %{password: "somepassword"}) do
     {:ok, bot} = Automation.create_bot(attrs.password)
 
     bot

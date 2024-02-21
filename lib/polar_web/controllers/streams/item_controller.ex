@@ -5,12 +5,14 @@ defmodule PolarWeb.Streams.ItemController do
   alias Polar.Accounts
   alias Polar.Streams.Item
 
+  action_fallback PolarWeb.FallbackController
+
   def show(conn, %{"space_token" => space_token, "id" => id}) do
     credential =
       Accounts.get_space_credential(token: space_token)
       |> Repo.preload([:space])
 
-    if credential do
+    if Accounts.space_credential_valid?(credential) do
       %{
         default_cdn_host: default_cdn_host
       } = Polar.Assets.config()

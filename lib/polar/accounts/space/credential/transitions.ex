@@ -12,6 +12,12 @@ defmodule Polar.Accounts.Space.Credential.Transitions do
 
   Credential
   |> transition(
+    [from: "active", to: "expired", via: "expire"],
+    fn changes -> transit(changes) end
+  )
+
+  Credential
+  |> transition(
     [from: "active", to: "deleted", via: "delete"],
     fn changes -> transit(changes) end
   )

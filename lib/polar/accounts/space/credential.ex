@@ -12,6 +12,8 @@ defmodule Polar.Accounts.Space.Credential do
   Transitions
   |> governs(:current_state, on: Event)
 
+  import Ecto.Query, only: [from: 2]
+
   @expires_in_range [
     %{label: "15", value: 1_296_000},
     %{label: "30", value: 2_592_000},
@@ -48,6 +50,10 @@ defmodule Polar.Accounts.Space.Credential do
     |> validate_inclusion(:type, ["lxd", "incus"])
     |> maybe_set_expires_at()
     |> validate_required([:token, :type, :name])
+  end
+
+  def scope(:active, queryable) do
+    from(c in queryable, where: c.current_state == "active")
   end
 
   defp maybe_set_expires_at(changeset) do
