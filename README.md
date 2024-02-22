@@ -28,7 +28,7 @@ Install dependencies using mix:
 mix deps.get
 ```
 
-## Start Server
+### Start Server
 
 You can start the server with the following command. It will be hosted on port 4000
 
