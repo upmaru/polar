@@ -12,7 +12,7 @@
               <.link
                 href={~p"/"}
                 class={
-                  if Phoenix.Controller.current_path(@conn) == ~p"/",
+                  if assigns[:current_path] == ~p"/",
                     do: "bg-slate-900 text-white rounded-md px-3 py-2 text-sm font-medium",
                     else: "text-slate-300 hover:bg-slate-700 hover:text-white"
                 }
