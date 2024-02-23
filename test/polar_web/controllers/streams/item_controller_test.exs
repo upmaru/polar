@@ -71,6 +71,11 @@ defmodule PolarWeb.Streams.ItemControllerTest do
     test "GET /spaces/:space_token/items/:id", %{credential: credential, item: item} do
       conn = get(build_conn(), ~s"/spaces/#{credential.token}/items/#{item.id}")
 
+      item_access =
+        Repo.get_by(Streams.Item.Access, item_id: item.id, space_credential_id: credential.id)
+
+      assert item_access.count == 1
+
       assert response(conn, 302)
     end
   end
