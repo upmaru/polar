@@ -155,6 +155,7 @@ defmodule PolarWeb.UserSettingsLive do
       |> assign(:password_form, to_form(password_changeset))
       |> assign(:trigger_submit, false)
       |> assign(:current_path, ~p"/users/settings")
+      |> assign(:page_title, "Settings")
 
     {:ok, socket}
   end
