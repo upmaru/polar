@@ -3,34 +3,44 @@ defmodule PolarWeb.UserLoginLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">
-        Sign in to account
+    <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <.header class="sm:mx-auto sm:w-full sm:max-w-md text-center">
+        <img class="mx-auto h-10 w-auto" src={~p"/images/opsmaru-logo.png"} alt="opsmaru.com" />
+        <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-white">
+          <%= gettext("Sign in to your account") %>
+        </h2>
         <:subtitle>
-          Don't have an account?
+          <%= gettext("Don't have an account?") %>
           <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
-            Sign up
+            <%= gettext("Sign up") %>
           </.link>
-          for an account now.
+          <%= gettext("for an account now.") %>
         </:subtitle>
       </.header>
 
-      <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
-        <.input field={@form[:email]} type="email" label="Email" required />
-        <.input field={@form[:password]} type="password" label="Password" required />
+      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
+        <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
+          <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
+            <.input field={@form[:email]} type="email" label="Email" required />
+            <.input field={@form[:password]} type="password" label="Password" required />
 
-        <:actions>
-          <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
-          <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
-            Forgot your password?
-          </.link>
-        </:actions>
-        <:actions>
-          <.button phx-disable-with="Signing in..." class="w-full">
-            Sign in <span aria-hidden="true">→</span>
-          </.button>
-        </:actions>
-      </.simple_form>
+            <:actions>
+              <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
+              <.link href={~p"/users/reset_password"} class="text-sm font-semibold text-indigo-600">
+                <%= gettext("Forgot your password?") %>
+              </.link>
+            </:actions>
+            <:actions>
+              <.button
+                phx-disable-with="Signing in..."
+                class="w-full bg-indigo-600 hover:bg-indigo-500"
+              >
+                Sign in <span aria-hidden="true">→</span>
+              </.button>
+            </:actions>
+          </.simple_form>
+        </div>
+      </div>
     </div>
     """
   end
