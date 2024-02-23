@@ -3,6 +3,7 @@ defmodule PolarWeb.Streams.ItemController do
 
   alias Polar.Repo
   alias Polar.Accounts
+  alias Polar.Streams
   alias Polar.Streams.Item
 
   action_fallback PolarWeb.FallbackController
@@ -18,6 +19,8 @@ defmodule PolarWeb.Streams.ItemController do
       } = Polar.Assets.config()
 
       item = Repo.get!(Item, id)
+
+      Streams.record_item_access(item, credential)
 
       endpoint = credential.space.cdn_host || default_cdn_host
 
