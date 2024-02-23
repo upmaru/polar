@@ -113,17 +113,16 @@ defmodule PolarWeb.CoreComponents do
     assigns = assign_new(assigns, :id, fn -> "flash-#{assigns.kind}" end)
 
     ~H"""
-    <div
-      :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
-      id={@id}
-      phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
-      role="alert"
-      aria-live="assertive"
-      class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
-      {@rest}
-    >
+    <div class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6">
       <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
-        <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+        <div
+          :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
+          id={@id}
+          phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
+          role="alert"
+          class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"
+          {@rest}
+        >
           <div class="p-4">
             <div class="flex items-start">
               <div class="flex-shrink-0">
