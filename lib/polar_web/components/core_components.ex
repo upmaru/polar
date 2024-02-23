@@ -321,7 +321,7 @@ defmodule PolarWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-slate-300 text-slate-900 focus:ring-0"
+          class="rounded border-slate-300 text-indigo-600 focus:ring-0"
           {@rest}
         />
         <%= @label %>
