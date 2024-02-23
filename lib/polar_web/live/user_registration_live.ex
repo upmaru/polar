@@ -6,38 +6,50 @@ defmodule PolarWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">
-        Register for an account
+    <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <.header class="sm:mx-auto sm:w-full sm:max-w-md text-center">
+        <img class="mx-auto h-10 w-auto" src={~p"/images/opsmaru-logo.png"} alt="opsmaru.com" />
+        <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-white">
+          <%= gettext("Register for an account") %>
+        </h2>
         <:subtitle>
-          Already registered?
+          <%= gettext("Already registered?") %>
           <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
-            Sign in
+            <%= gettext("Sign in") %>
           </.link>
-          to your account now.
+          <%= gettext("to your account now.") %>
         </:subtitle>
       </.header>
 
-      <.simple_form
-        for={@form}
-        id="registration_form"
-        phx-submit="save"
-        phx-change="validate"
-        phx-trigger-action={@trigger_submit}
-        action={~p"/users/log_in?_action=registered"}
-        method="post"
-      >
-        <.error :if={@check_errors}>
-          Oops, something went wrong! Please check the errors below.
-        </.error>
+      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
+        <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
+          <.simple_form
+            for={@form}
+            id="registration_form"
+            phx-submit="save"
+            phx-change="validate"
+            phx-trigger-action={@trigger_submit}
+            action={~p"/users/log_in?_action=registered"}
+            method="post"
+          >
+            <.error :if={@check_errors}>
+              Oops, something went wrong! Please check the errors below.
+            </.error>
 
-        <.input field={@form[:email]} type="email" label="Email" required />
-        <.input field={@form[:password]} type="password" label="Password" required />
+            <.input field={@form[:email]} type="email" label="Email" required />
+            <.input field={@form[:password]} type="password" label="Password" required />
 
-        <:actions>
-          <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
-        </:actions>
-      </.simple_form>
+            <:actions>
+              <.button
+                phx-disable-with="Creating account..."
+                class="w-full bg-indigo-600 hover:bg-indigo-500"
+              >
+                Create an account
+              </.button>
+            </:actions>
+          </.simple_form>
+        </div>
+      </div>
     </div>
     """
   end
