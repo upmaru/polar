@@ -22,4 +22,10 @@ defmodule Polar.Streams do
   defdelegate create_version(product, attrs),
     to: Version.Manager,
     as: :create
+
+  alias __MODULE__.Item
+
+  defdelegate record_item_access(item, space_credential),
+    to: Item.Manager,
+    as: :record_access
 end

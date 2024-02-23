@@ -8,8 +8,40 @@ defmodule Polar.StreamsFixtures do
       release_title: "3.19",
       variant: "default",
       requirements: %{
-        secureboot: false
+        "secureboot" => "false"
       }
+    }
+  end
+
+  def valid_version_attributes() do
+    hash1 =
+      :crypto.strong_rand_bytes(32)
+      |> Base.encode16()
+      |> String.downcase()
+
+    hash2 =
+      :crypto.strong_rand_bytes(32)
+      |> Base.encode16()
+      |> String.downcase()
+
+    %{
+      serial: "20240209_13:00",
+      items: [
+        %{
+          name: "lxd.tar.gz",
+          file_type: "lxd.tar.gz",
+          hash: hash1,
+          size: 876,
+          path: "images/alpine/edge/amd64/default/20240209_13:00/incus.tar.xz"
+        },
+        %{
+          name: "root.squashfs",
+          file_type: "squashfs",
+          hash: hash2,
+          size: 2_982_800,
+          path: "images/alpine/edge/amd64/default/20240209_13:00/rootfs.tar.xz"
+        }
+      ]
     }
   end
 end
