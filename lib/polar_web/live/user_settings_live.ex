@@ -5,35 +5,67 @@ defmodule PolarWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
-    <.header class="text-center">
-      Account Settings
-      <:subtitle>Manage your account email address and password settings</:subtitle>
-    </.header>
+    <div class="space-y-10 divide-y divide-slate-900/10">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
+        <.header class="px-4 sm:px-0">
+          <h2 class="text-base font-semibold leading-7 text-slate-200">
+            <%= gettext("Account Settings") %>
+          </h2>
+          <:subtitle>
+            <p class="mt-1 text-sm leading-6 text-slate-400">
+              <%= gettext("Manage your account email address and password settings") %>
+            </p>
+          </:subtitle>
+        </.header>
 
-    <div class="space-y-12 divide-y">
-      <div>
         <.simple_form
           for={@email_form}
           id="email_form"
           phx-submit="update_email"
           phx-change="validate_email"
+          class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl md:col-span-2"
         >
-          <.input field={@email_form[:email]} type="email" label="Email" required />
-          <.input
-            field={@email_form[:current_password]}
-            name="current_password"
-            id="current_password_for_email"
-            type="password"
-            label="Current password"
-            value={@email_form_current_password}
-            required
-          />
+          <div class="px-4 py-6 sm:p-8">
+            <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div class="sm:col-span-4">
+                <.input field={@email_form[:email]} type="email" label="Email" required />
+              </div>
+              <div class="sm:col-span-4">
+                <.input
+                  field={@email_form[:current_password]}
+                  name="current_password"
+                  id="current_password_for_email"
+                  type="password"
+                  label="Current password"
+                  value={@email_form_current_password}
+                  required
+                />
+              </div>
+            </div>
+          </div>
           <:actions>
-            <.button phx-disable-with="Changing...">Change Email</.button>
+            <div class="flex items-center justify-end gap-x-6 border-t border-slate-900/10 px-4 py-4 sm:px-8">
+              <.button
+                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                phx-disable-with="Changing..."
+              >
+                <%= gettext("Change Email") %>
+              </.button>
+            </div>
           </:actions>
         </.simple_form>
       </div>
-      <div>
+
+      <div class="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
+        <.header class="px-4 sm:px-0">
+          <h2 class="text-base font-semibold leading-7 text-slate-200">
+            <%= gettext("Change Password") %>
+          </h2>
+          <p class="mt-1 text-sm leading-6 text-slate-400">
+            <%= gettext("You can update your password here.") %>
+          </p>
+        </.header>
+
         <.simple_form
           for={@password_form}
           id="password_form"
@@ -42,6 +74,7 @@ defmodule PolarWeb.UserSettingsLive do
           phx-change="validate_password"
           phx-submit="update_password"
           phx-trigger-action={@trigger_submit}
+          class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl md:col-span-2"
         >
           <.input
             field={@password_form[:email]}
@@ -49,23 +82,45 @@ defmodule PolarWeb.UserSettingsLive do
             id="hidden_user_email"
             value={@current_email}
           />
-          <.input field={@password_form[:password]} type="password" label="New password" required />
-          <.input
-            field={@password_form[:password_confirmation]}
-            type="password"
-            label="Confirm new password"
-          />
-          <.input
-            field={@password_form[:current_password]}
-            name="current_password"
-            type="password"
-            label="Current password"
-            id="current_password_for_password"
-            value={@current_password}
-            required
-          />
+          <div class="px-4 py-6 sm:p-8">
+            <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div class="sm:col-span-4">
+                <.input
+                  field={@password_form[:password]}
+                  type="password"
+                  label="New password"
+                  required
+                />
+              </div>
+              <div class="sm:col-span-4">
+                <.input
+                  field={@password_form[:password_confirmation]}
+                  type="password"
+                  label="Confirm new password"
+                />
+              </div>
+              <div class="sm:col-span-4">
+                <.input
+                  field={@password_form[:current_password]}
+                  name="current_password"
+                  type="password"
+                  label="Current password"
+                  id="current_password_for_password"
+                  value={@current_password}
+                  required
+                />
+              </div>
+            </div>
+          </div>
           <:actions>
-            <.button phx-disable-with="Changing...">Change Password</.button>
+            <div class="flex items-center justify-end gap-x-6 border-t border-slate-900/10 px-4 py-4 sm:px-8">
+              <.button
+                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                phx-disable-with="Changing..."
+              >
+                Change Password
+              </.button>
+            </div>
           </:actions>
         </.simple_form>
       </div>
@@ -99,6 +154,7 @@ defmodule PolarWeb.UserSettingsLive do
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
       |> assign(:trigger_submit, false)
+      |> assign(:current_path, ~p"/users/settings")
 
     {:ok, socket}
   end

@@ -11,17 +11,28 @@ defmodule PolarWeb.UserForgotPasswordLive do
         <h1 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-white">
           <%= gettext("Forgot your password?") %>
         </h1>
-        <:subtitle><%= gettext("We'll send a password reset link to your inbox") %></:subtitle>
+        <:subtitle>
+          <p class="mt-2 text-sm leading-6 text-slate-50">
+            <%= gettext("We'll send a password reset link to your inbox") %>
+          </p>
+        </:subtitle>
       </.header>
 
       <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
         <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-          <.simple_form for={@form} id="reset_password_form" phx-submit="send_email">
-            <.input field={@form[:email]} type="email" placeholder="Email" required />
+          <.simple_form for={@form} id="reset_password_form" class="space-y-6" phx-submit="send_email">
+            <div>
+              <.input field={@form[:email]} type="email" placeholder="Email" required />
+            </div>
             <:actions>
-              <.button phx-disable-with="Sending..." class="w-full bg-indigo-600 hover:bg-indigo-500">
-                Send password reset instructions
-              </.button>
+              <div>
+                <.button
+                  phx-disable-with="Sending..."
+                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Send password reset instructions
+                </.button>
+              </div>
             </:actions>
           </.simple_form>
         </div>

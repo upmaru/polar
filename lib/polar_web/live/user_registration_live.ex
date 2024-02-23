@@ -13,11 +13,13 @@ defmodule PolarWeb.UserRegistrationLive do
           <%= gettext("Register for an account") %>
         </h1>
         <:subtitle>
-          <%= gettext("Already registered?") %>
-          <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
-            <%= gettext("Sign in") %>
-          </.link>
-          <%= gettext("to your account now.") %>
+          <p class="mt-2 text-sm leading-6 text-slate-50">
+            <%= gettext("Already registered?") %>
+            <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
+              <%= gettext("Sign in") %>
+            </.link>
+            <%= gettext("to your account now.") %>
+          </p>
         </:subtitle>
       </.header>
 
@@ -31,21 +33,28 @@ defmodule PolarWeb.UserRegistrationLive do
             phx-trigger-action={@trigger_submit}
             action={~p"/users/log_in?_action=registered"}
             method="post"
+            class="space-y-6"
           >
             <.error :if={@check_errors}>
               Oops, something went wrong! Please check the errors below.
             </.error>
 
-            <.input field={@form[:email]} type="email" label="Email" required />
-            <.input field={@form[:password]} type="password" label="Password" required />
+            <div>
+              <.input field={@form[:email]} type="email" label="Email" required />
+            </div>
+            <div>
+              <.input field={@form[:password]} type="password" label="Password" required />
+            </div>
 
             <:actions>
-              <.button
-                phx-disable-with="Creating account..."
-                class="w-full bg-indigo-600 hover:bg-indigo-500"
-              >
-                Create an account
-              </.button>
+              <div>
+                <.button
+                  phx-disable-with="Creating account..."
+                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  <%= gettext("Create an account") %>
+                </.button>
+              </div>
             </:actions>
           </.simple_form>
         </div>

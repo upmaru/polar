@@ -228,12 +228,10 @@ defmodule PolarWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="space-y-8">
-        <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
-          <%= render_slot(action, f) %>
-        </div>
-      </div>
+      <%= render_slot(@inner_block, f) %>
+      <%= for action <- @actions do %>
+        <%= render_slot(action, f) %>
+      <% end %>
     </.form>
     """
   end
@@ -257,8 +255,7 @@ defmodule PolarWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-md py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-75",
         @class
       ]}
       {@rest}
@@ -457,9 +454,9 @@ defmodule PolarWeb.CoreComponents do
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
         <%= render_slot(@inner_block) %>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-slate-50">
+        <%= if @subtitle != [] do %>
           <%= render_slot(@subtitle) %>
-        </p>
+        <% end %>
       </div>
       <div class="flex-none"><%= render_slot(@actions) %></div>
     </header>

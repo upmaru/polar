@@ -10,33 +10,57 @@ defmodule PolarWeb.UserLoginLive do
           <%= gettext("Sign in to your account") %>
         </h1>
         <:subtitle>
-          <%= gettext("Don't have an account?") %>
-          <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
-            <%= gettext("Sign up") %>
-          </.link>
-          <%= gettext("for an account now.") %>
+          <p class="mt-2 text-sm leading-6 text-slate-50">
+            <%= gettext("Don't have an account?") %>
+            <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
+              <%= gettext("Sign up") %>
+            </.link>
+            <%= gettext("for an account now.") %>
+          </p>
         </:subtitle>
       </.header>
 
       <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
         <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-          <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
-            <.input field={@form[:email]} type="email" label="Email" required />
-            <.input field={@form[:password]} type="password" label="Password" required />
+          <.simple_form
+            for={@form}
+            id="login_form"
+            action={~p"/users/log_in"}
+            class="space-y-6"
+            phx-update="ignore"
+          >
+            <div>
+              <.input field={@form[:email]} type="email" label="Email" required />
+            </div>
+            <div>
+              <.input field={@form[:password]} type="password" label="Password" required />
+            </div>
 
             <:actions>
-              <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
-              <.link href={~p"/users/reset_password"} class="text-sm font-semibold text-indigo-600">
-                <%= gettext("Forgot your password?") %>
-              </.link>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
+                </div>
+
+                <div>
+                  <.link
+                    href={~p"/users/reset_password"}
+                    class="text-sm font-semibold text-indigo-600"
+                  >
+                    <%= gettext("Forgot your password?") %>
+                  </.link>
+                </div>
+              </div>
             </:actions>
             <:actions>
-              <.button
-                phx-disable-with="Signing in..."
-                class="w-full bg-indigo-600 hover:bg-indigo-500"
-              >
-                Sign in <span aria-hidden="true">→</span>
-              </.button>
+              <div>
+                <.button
+                  phx-disable-with="Signing in..."
+                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  <%= gettext("Sign in") %>
+                </.button>
+              </div>
             </:actions>
           </.simple_form>
         </div>
