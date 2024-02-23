@@ -1,12 +1,16 @@
 # Polar
 
-Polar is an image server for LXD / Incus. It has some useful features like 
+Polar is an image server for LXD / Incus. It has some useful features like:
 
 + Per `space` credential generation.
 + Feed specific to incus / lxd, you can choose when creating credentials.
 + Users can create `spaces` to manage multiple credentials.
 
 The build system for polar is called [icepak](https://github.com/upmaru/icepak). It's designed to run as a github action, you can see it in action [here](https://github.com/upmaru/opsmaru-images).
+
+## Demo
+
++ [Sandbox Site](https://images.opsmaru.dev)
 
 ## Basic Architecture
 
