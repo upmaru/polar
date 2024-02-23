@@ -96,4 +96,8 @@ defmodule PolarWeb.UserRegistrationLive do
       assign(socket, form: form)
     end
   end
+
+  def handle_info(_message, socket) do
+    {:noreply, socket}
+  end
 end

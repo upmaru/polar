@@ -50,4 +50,8 @@ defmodule PolarWeb.UserLoginLive do
     form = to_form(%{"email" => email}, as: "user")
     {:ok, assign(socket, form: form), temporary_assigns: [form: form]}
   end
+
+  def handle_info(_message, socket) do
+    {:noreply, socket}
+  end
 end
