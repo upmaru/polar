@@ -58,7 +58,8 @@ defmodule Polar.Streams.Product do
     from(
       p in queryable,
       join: v in assoc(p, :active_versions),
-      where: not is_nil(v.product_id)
+      where: not is_nil(v.product_id),
+      group_by: [:id]
     )
   end
 
