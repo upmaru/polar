@@ -5,6 +5,14 @@ defmodule Polar.Streams.Version do
   alias Polar.Streams.Product
   alias Polar.Streams.Item
 
+  alias __MODULE__.Transitions
+  alias __MODULE__.Event
+
+  use Eventful.Transitable
+
+  Transitions
+  |> governs(:current_state, on: Event)
+
   import Ecto.Query, only: [from: 2]
 
   schema "versions" do
