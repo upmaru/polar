@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" class="[scrollbar-gutter:stable]" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+    <link rel="manifest" href="/images/site.webmanifest" />
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <.live_title suffix=" · Polar">
+      <%= "Page Not Found" %>
+    </.live_title>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+    <%= if domain = System.get_env("PHX_HOST") do %>
+      <script defer data-domain={domain} src="https://plausible.io/js/script.js">
+      </script>
+    <% end %>
+  </head>
+  <body class="h-full bg-slate-950">
+    <div class="mx-auto mt-20 max-w-2xl text-center sm:mt-24">
+      <p class="text-base font-semibold leading-8 text-indigo-400"><%= gettext("404") %></p>
+      <h1 class="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+        <%= gettext("This page does not exist") %>
+      </h1>
+      <p class="mt-4 text-base leading-7 text-gray-600 sm:mt-6 sm:text-lg sm:leading-8">
+        <% gettext("Sorry, we couldn’t find the page you’re looking for.") %>
+      </p>
+    </div>
+    <div class="mx-auto mt-16 flow-root max-w-lg sm:mt-20">
+      <h2 class="sr-only"><%= gettext("Check out other pages") %></h2>
+      <ul role="list" class="-mt-6 divide-y divide-gray-900/5 border-b border-gray-900/5">
+        <li class="relative flex gap-x-6 py-6">
+          <div class="flex h-10 w-10 flex-none items-center justify-center rounded-lg shadow-sm ring-1 ring-slate-900/10">
+            <.icon name="hero-home-solid" class="h-6 w-6 text-indigo-400" />
+          </div>
+          <div class="flex-auto">
+            <h3 class="text-sm font-semibold leading-6 text-slate-100">
+              <a href="/">
+                <span class="absolute inset-0" aria-hidden="true"></span> <%= gettext(
+                  "Take me home"
+                ) %>
+              </a>
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-slate-200">
+              <%= gettext("to the place I belong. West Virginia.") %>
+            </p>
+          </div>
+          <div class="flex-none self-center">
+            <.icon name="hero-chevron-right-solid" class="h-5 w-5 text-slate-400" />
+          </div>
+        </li>
+        <li class="relative flex gap-x-6 py-6">
+          <div class="flex h-10 w-10 flex-none items-center justify-center rounded-lg shadow-sm ring-1 ring-gray-900/10">
+            <.icon name="hero-squares-plus-solid" class="h-6 w-6 text-indigo-400" />
+          </div>
+          <div class="flex-auto">
+            <h3 class="text-sm font-semibold leading-6 text-slate-100">
+              <a href={~p"/dashboard"}>
+                <span class="absolute inset-0" aria-hidden="true"></span> <%= gettext("Dashboard") %>
+              </a>
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-slate-200">
+              <%= gettext("Go back to the dashboard.") %>
+            </p>
+          </div>
+          <div class="flex-none self-center">
+            <.icon name="hero-chevron-right-solid" class="h-5 w-5 text-slate-400" />
+          </div>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

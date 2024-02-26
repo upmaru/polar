@@ -21,21 +21,12 @@ defmodule PolarWeb.Dashboard.SpaceLive do
   end
 
   def mount(%{"id" => id}, _session, %{assigns: assigns} = socket) do
-    space = Repo.get_by(Space, owner_id: assigns.current_user.id, id: id)
+    space = Repo.get_by!(Space, owner_id: assigns.current_user.id, id: id)
 
-    if space do
-      socket =
-        socket
-        |> assign(:page_title, space.name)
+    socket =
+      socket
+      |> assign(:page_title, space.name)
 
-      {:ok, socket}
-    else
-      socket =
-        socket
-        |> put_flash(:error, gettext("Space not found"))
-        |> push_navigate(to: ~p"/dashboard")
-
-      {:ok, socket}
-    end
+    {:ok, socket}
   end
 end

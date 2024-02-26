@@ -14,7 +14,7 @@ defmodule PolarWeb.Dashboard.Space.NewLive do
           </h2>
           <p class="mt-1 text-sm leading-6 text-slate-400">
             <%= gettext(
-              "Spaces encapsulate all your tokens, it can represent an organization or just a workspace."
+              "Spaces group all your tokens, it can represent an organization or just a workspace."
             ) %>
           </p>
         </div>
