@@ -5,7 +5,7 @@ defmodule PolarWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
-    <div class="space-y-10 divide-y divide-slate-900/10">
+    <div class="space-y-10 divide-y divide-slate-800">
       <div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
         <.header class="px-4 sm:px-0">
           <h2 class="text-base font-semibold leading-7 text-slate-200">

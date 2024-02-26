@@ -21,6 +21,18 @@
               >
                 <%= gettext("Home") %>
               </.link>
+              <.link
+                navigate={~p"/dashboard"}
+                class={
+                  if assigns[:current_path] == ~p"/dashboard",
+                    do: "bg-slate-900 text-white rounded-md px-3 py-2 text-sm font-medium",
+                    else:
+                      "rounded-md px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-900 hover:text-white"
+                }
+                aria-current="page"
+              >
+                <%= gettext("Dashboard") %>
+              </.link>
             </div>
           </div>
         </div>
@@ -28,7 +40,7 @@
           <div class="ml-4 flex items-center md:ml-6">
             <%= if @current_user do %>
               <.link
-                href={~p"/users/settings"}
+                navigate={~p"/users/settings"}
                 class={
                   if assigns[:current_path] == ~p"/users/settings",
                     do: "bg-slate-900 text-white rounded-md px-3 py-2 text-sm font-medium",
@@ -47,13 +59,13 @@
               </.link>
             <% else %>
               <.link
-                href={~p"/users/log_in"}
+                navigate={~p"/users/log_in"}
                 class="text-slate-300 rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-900 hover:text-white"
               >
                 <%= gettext("Sign In") %>
               </.link>
               <.link
-                href={~p"/users/register"}
+                navigate={~p"/users/register"}
                 class="text-slate-300 rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-900 hover:text-white"
               >
                 <%= gettext("Register") %>

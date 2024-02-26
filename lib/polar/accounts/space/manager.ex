@@ -11,6 +11,10 @@ defmodule Polar.Accounts.Space.Manager do
     |> Repo.insert()
   end
 
+  def change(%Space{} = space, attrs \\ %{}) do
+    Space.changeset(space, attrs)
+  end
+
   def get_credential(token: token) do
     Space.Credential.scope(:active, Space.Credential)
     |> Repo.get_by(token: token)
