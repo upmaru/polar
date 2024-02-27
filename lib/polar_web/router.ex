@@ -77,6 +77,8 @@ defmodule PolarWeb.Router do
   scope "/spaces/:space_token", PolarWeb do
     pipe_through :api
 
+    get "/", SpaceController, :show
+
     scope "/streams/v1" do
       get "/index.json", StreamController, :index
       get "/images.json", Streams.ImageController, :index

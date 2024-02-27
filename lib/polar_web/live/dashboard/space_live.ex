@@ -48,6 +48,7 @@ defmodule PolarWeb.Dashboard.SpaceLive do
       <ul class="divide-y divide-slate-100">
         <li
           :for={credential <- @credentials}
+          id={"credential_#{credential.id}"}
           class="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6"
         >
           <div class="min-w-0">
