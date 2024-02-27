@@ -20,6 +20,10 @@ defmodule Polar.Accounts.Space.Manager do
     |> Repo.get_by(token: token)
   end
 
+  def change_credential(credential_or_changeset, attrs \\ %{}) do
+    Space.Credential.changeset(credential_or_changeset, attrs)
+  end
+
   def create_credential(%Accounts.Space{} = space, user, params) do
     %Space.Credential{space_id: space.id}
     |> Space.Credential.changeset(params)

@@ -54,6 +54,9 @@ defmodule PolarWeb.Router do
       live "/dashboard/spaces/new", Dashboard.Space.NewLive, :new
       live "/dashboard/spaces/:id", Dashboard.SpaceLive, :show
 
+      live "/dashboard/spaces/:space_id/credentials/new", Dashboard.Credential.NewLive, :new
+      live "/dashboard/spaces/:space_id/credentials/:id", Dashboard.CredentialLive, :show
+
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end

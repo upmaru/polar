@@ -64,7 +64,7 @@ defmodule PolarWeb.Dashboard.Space.NewLive do
     {:ok, socket}
   end
 
-  def handle_event("validate", %{"space" => space_params} = params, %{assigns: assigns} = socket) do
+  def handle_event("validate", %{"space" => space_params}, %{assigns: assigns} = socket) do
     space_form =
       %Space{owner_id: assigns.current_user.id}
       |> Accounts.change_space(space_params)
@@ -84,7 +84,7 @@ defmodule PolarWeb.Dashboard.Space.NewLive do
         socket =
           socket
           |> put_flash(:info, gettext("Space successfully created!"))
-          |> push_navigate(to: ~p"/dashboard")
+          |> push_navigate(to: ~p"/dashboard/spaces/#{space.id}")
 
         {:noreply, socket}
 

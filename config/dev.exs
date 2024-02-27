@@ -22,7 +22,7 @@ config :polar, PolarWeb.Endpoint,
   http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
-  debug_errors: false,
+  debug_errors: true,
   secret_key_base: "TzqTbHuNO4m/845kDoNhFVdt2NYb0Ql8IQudyE594mks0WPM6jgK4DiSDrAZQTsJ",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:polar, ~w(--sourcemap=inline --watch)]},

@@ -39,6 +39,8 @@ defmodule Polar.Accounts.Space.Credential do
 
   def expires_in_range, do: @expires_in_range
 
+  def types, do: ["lxd", "incus"]
+
   @doc false
   def changeset(credential, attrs) do
     expires_in_range_values = Enum.map(@expires_in_range, fn r -> r.value end)
@@ -47,9 +49,10 @@ defmodule Polar.Accounts.Space.Credential do
     |> cast(attrs, [:name, :expires_in, :type])
     |> generate_token()
     |> validate_inclusion(:expires_in, expires_in_range_values)
-    |> validate_inclusion(:type, ["lxd", "incus"])
+    |> validate_inclusion(:type, types())
     |> maybe_set_expires_at()
     |> validate_required([:token, :type, :name])
+    |> unique_constraint(:name, name: :space_credentials_space_id_name_index)
   end
 
   def scope(:active, queryable) do

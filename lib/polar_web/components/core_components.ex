@@ -389,6 +389,17 @@ defmodule PolarWeb.CoreComponents do
     """
   end
 
+  def input(%{type: "radio"} = assigns) do
+    assigns =
+      assign_new(assigns, :checked, fn ->
+        Phoenix.HTML.Form.normalize_value("checkbox", assigns[:value])
+      end)
+
+    ~H"""
+    <input id={@id} type={@type} name={@name} checked={@checked} value={@value} {@rest} />
+    """
+  end
+
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""

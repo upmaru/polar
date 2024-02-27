@@ -24,6 +24,14 @@ defmodule Polar.Accounts do
     to: Space.Manager,
     as: :get_credential
 
+  defdelegate change_space_credential(credential),
+    to: Space.Manager,
+    as: :change_credential
+
+  defdelegate change_space_credential(credential, attrs),
+    to: Space.Manager,
+    as: :change_credential
+
   defdelegate create_space_credential(space, user, params),
     to: Space.Manager,
     as: :create_credential
