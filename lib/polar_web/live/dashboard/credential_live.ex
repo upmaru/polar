@@ -71,7 +71,7 @@ defmodule PolarWeb.Dashboard.CredentialLive do
               <%= Map.fetch!(@cli_tools, @credential.type) %> remote add opsmaru <%= url(
                 @socket,
                 ~p"/spaces/#{@credential.token}"
-              ) %>
+              ) %> --public --protocol simplestreams
             </div>
           </div>
         </dl>
