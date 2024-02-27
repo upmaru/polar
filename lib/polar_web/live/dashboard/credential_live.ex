@@ -48,7 +48,26 @@ defmodule PolarWeb.Dashboard.CredentialLive do
             </dd>
           </div>
           <div class="px-4 py-6 sm:gap-4 sm:px-6">
-            <div class="px-4 py-6 sm:gap-4 sm:px-6 font-mono bg-slate-800 text-slate-300 rounded-md">
+            <div class="rounded-md bg-yellow-50 p-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <.icon name="hero-exclamation-triangle-solid" class="h-5 w-5 text-yellow-400" />
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-yellow-800">
+                    <%= gettext("Do not share your credential") %>
+                  </h3>
+                  <div class="mt-2 text-sm text-yellow-700">
+                    <p>
+                      <%= gettext(
+                        "This credential is only meant for you, please do not share it with external parties."
+                      ) %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 px-4 py-6 sm:gap-4 sm:px-6 font-mono bg-slate-800 text-slate-300 rounded-md">
               <%= Map.fetch!(@cli_tools, @credential.type) %> remote add opsmaru <%= url(
                 @socket,
                 ~p"/spaces/#{@credential.token}"
