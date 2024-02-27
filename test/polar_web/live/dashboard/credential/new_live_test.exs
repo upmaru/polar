@@ -32,5 +32,17 @@ defmodule PolarWeb.Dashboard.Credential.NewLiveTest do
 
       assert_redirect(lv, ~p"/dashboard/spaces/#{space.id}/credentials/#{credential.id}")
     end
+
+    test "validation", %{conn: conn, space: space} do
+      {:ok, lv, _html} = live(conn, ~p"/dashboard/spaces/#{space.id}/credentials/new")
+
+      lv
+      |> form("#new-credential-form")
+      |> render_change(%{
+        "credential" => %{"name" => "new-cred-test"}
+      })
+
+      assert render(lv) =~ "can&#39;t be blank"
+    end
   end
 end
