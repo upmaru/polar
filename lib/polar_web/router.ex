@@ -49,6 +49,14 @@ defmodule PolarWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{PolarWeb.UserAuth, :ensure_authenticated}] do
+      live "/dashboard", DashboardLive, :show
+
+      live "/dashboard/spaces/new", Dashboard.Space.NewLive, :new
+      live "/dashboard/spaces/:id", Dashboard.SpaceLive, :show
+
+      live "/dashboard/spaces/:space_id/credentials/new", Dashboard.Credential.NewLive, :new
+      live "/dashboard/spaces/:space_id/credentials/:id", Dashboard.CredentialLive, :show
+
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
@@ -68,6 +76,8 @@ defmodule PolarWeb.Router do
 
   scope "/spaces/:space_token", PolarWeb do
     pipe_through :api
+
+    get "/", SpaceController, :show
 
     scope "/streams/v1" do
       get "/index.json", StreamController, :index

@@ -6,7 +6,6 @@ defmodule Polar.Accounts.Space do
 
   schema "spaces" do
     field :name, :string
-    field :cdn_host, :string
 
     belongs_to :owner, User
 
@@ -16,7 +15,8 @@ defmodule Polar.Accounts.Space do
   @doc false
   def changeset(space, attrs) do
     space
-    |> cast(attrs, [:name, :cdn_host])
+    |> cast(attrs, [:name])
     |> validate_required([:name])
+    |> unique_constraint(:name, name: :spaces_owner_id_name_index)
   end
 end

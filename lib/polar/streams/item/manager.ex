@@ -19,8 +19,10 @@ defmodule Polar.Streams.Item.Manager do
         |> Repo.insert!()
 
       %Item.Access{id: item_access_id} = item_access ->
+        timestamp = DateTime.utc_now()
+
         from(ia in Item.Access,
-          update: [inc: [count: 1]],
+          update: [inc: [count: 1], set: [updated_at: ^timestamp]],
           where: ia.id == ^item_access_id
         )
         |> Repo.update_all([])
