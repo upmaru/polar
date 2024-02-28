@@ -6,6 +6,13 @@ defmodule PolarWeb.RootLive do
 
   import Ecto.Query, only: [from: 2]
 
+  @arch_colors %{
+    "amd64" =>
+      "inline-flex items-center rounded-full bg-amber-100 px-2 py-1 text-xs font-medium text-amber-800",
+    "arm64" =>
+      "inline-flex items-center rounded-full bg-cyan-100 px-2 py-1 text-xs font-medium text-cyan-700"
+  }
+
   def render(assigns) do
     ~H"""
     <div class="px-4 sm:px-0">
@@ -47,6 +54,9 @@ defmodule PolarWeb.RootLive do
                       <%= gettext("OS") %>
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      <%= gettext("Release") %>
+                    </th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                       <%= gettext("Arch") %>
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
@@ -71,7 +81,12 @@ defmodule PolarWeb.RootLive do
                         <%= version.product.os %>
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <%= version.product.arch %>
+                        <%= version.product.release %>
+                      </td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <span class={Map.fetch!(@arch_colors, version.product.arch)}>
+                          <%= version.product.arch %>
+                        </span>
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <%= Calendar.strftime(
@@ -98,8 +113,8 @@ defmodule PolarWeb.RootLive do
         where: v.current_state == ^"active",
         join: p in assoc(v, :product),
         preload: [{:product, p}],
-        order_by: [asc: [p.os, p.arch]],
-        order_by: [desc: :inserted_at]
+        order_by: [asc: [p.os]],
+        order_by: [desc: [p.release]]
       )
       |> Repo.all()
 
@@ -108,6 +123,7 @@ defmodule PolarWeb.RootLive do
       |> assign(:versions, versions)
       |> assign(:page_title, gettext("OpsMaru Images"))
       |> assign(:current_path, ~p"/")
+      |> assign(:arch_colors, @arch_colors)
 
     {:ok, socket}
   end
