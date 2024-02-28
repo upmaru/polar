@@ -5,6 +5,7 @@ defmodule Polar.Streams.Version.ManagerTest do
   alias Polar.Accounts
 
   import Polar.AccountsFixtures
+  import Polar.StreamsFixtures
 
   setup do
     password = Accounts.generate_automation_password()
@@ -30,64 +31,14 @@ defmodule Polar.Streams.Version.ManagerTest do
   describe "create_version" do
     test "can successfully create new version", %{product: product} do
       assert {:ok, _version} =
-               Streams.create_version(product, %{
-                 serial: "20240209-2",
-                 items: [
-                   %{
-                     name: "lxd.tar.gz",
-                     file_type: "lxd.tar.gz",
-                     hash: "35363f3d086271ed5402d61ab18ec03987bed51758c00079b8c9d372ff6d62dd",
-                     size: 876,
-                     is_metadata: true,
-                     path: "images/alpine/edge/amd64/default/20240209_13:00/incus.tar.xz",
-                     combined_hashes: [
-                       %{
-                         name: "combined_squashfs_sha256",
-                         hash: "a9f02be498bf52b7bac7b5b1cfceb115878d257ad86a359a969e61fbd4bfe0bf"
-                       }
-                     ]
-                   },
-                   %{
-                     name: "root.squashfs",
-                     file_type: "squashfs",
-                     hash: "47cc4070da1bf17d8364c390…3603f4ed7e9e46582e690d2",
-                     size: 2_982_800,
-                     path: "images/alpine/edge/amd64/default/20240209_13:00/rootfs.tar.xz"
-                   }
-                 ]
-               })
+               Streams.create_version(product, valid_version_attributes(2))
     end
   end
 
   describe "deactivate old version on create" do
     setup %{product: product} do
       {:ok, version} =
-        Streams.create_version(product, %{
-          serial: "20240209-2",
-          items: [
-            %{
-              name: "lxd.tar.gz",
-              file_type: "lxd.tar.gz",
-              hash: "35363f3d086271ed5402d61ab18ec03987bed51758c00079b8c9d372ff6d62dd",
-              size: 876,
-              is_metadata: true,
-              path: "images/alpine/edge/amd64/default/20240209_13:00/incus.tar.xz",
-              combined_hashes: [
-                %{
-                  name: "combined_squashfs_sha256",
-                  hash: "a9f02be498bf52b7bac7b5b1cfceb115878d257ad86a359a969e61fbd4bfe0bf"
-                }
-              ]
-            },
-            %{
-              name: "root.squashfs",
-              file_type: "squashfs",
-              hash: "47cc4070da1bf17d8364c390…3603f4ed7e9e46582e690d2",
-              size: 2_982_800,
-              path: "images/alpine/edge/amd64/default/20240209_13:00/rootfs.tar.xz"
-            }
-          ]
-        })
+        Streams.create_version(product, valid_version_attributes(2))
 
       %{existing_version: version}
     end
@@ -97,36 +48,42 @@ defmodule Polar.Streams.Version.ManagerTest do
       existing_version: existing_version
     } do
       assert {:ok, _version} =
-               Streams.create_version(product, %{
-                 serial: "20240209-3",
-                 items: [
-                   %{
-                     name: "lxd.tar.gz",
-                     file_type: "lxd.tar.gz",
-                     hash: "35363f3d086271ed5402d61ab18ec03987bed51758c00079b8c9d372ff6d62aa",
-                     size: 876,
-                     is_metadata: true,
-                     path: "images/alpine/edge/amd64/default/20240209_13:00/incus.tar.xz",
-                     combined_hashes: [
-                       %{
-                         name: "combined_squashfs_sha256",
-                         hash: "a9f02be498bf52b7bac7b5b1cfceb115878d257ad86a359a969e61fbd4bfe0aa"
-                       }
-                     ]
-                   },
-                   %{
-                     name: "root.squashfs",
-                     file_type: "squashfs",
-                     hash: "47cc4070da1bf17d8364c390…3603f4ed7e9e46582e690aa",
-                     size: 2_982_800,
-                     path: "images/alpine/edge/amd64/default/20240209_13:00/rootfs.tar.xz"
-                   }
-                 ]
-               })
+               Streams.create_version(product, valid_version_attributes(3))
 
       existing_version = Repo.reload(existing_version)
 
       assert existing_version.current_state == "inactive"
+    end
+  end
+
+  describe "keep 2 previous version" do
+    setup %{product: product} do
+      Polar.Globals.save("basic", %{versions_per_product: 2})
+
+      {:ok, version3} =
+        Streams.create_version(product, valid_version_attributes(3))
+
+      {:ok, version4} =
+        Streams.create_version(product, valid_version_attributes(4))
+
+      %{existing_version: version4, to_be_inactive: version3}
+    end
+
+    test "create new version deactivate version 3", %{
+      product: product,
+      existing_version: existing_version,
+      to_be_inactive: to_be_inactive
+    } do
+      assert {:ok, _version} =
+               Streams.create_version(product, valid_version_attributes(5))
+
+      to_be_inactive = Repo.reload(to_be_inactive)
+
+      assert to_be_inactive.current_state == "inactive"
+
+      existing_version = Repo.reload(existing_version)
+
+      assert existing_version.current_state == "active"
     end
   end
 end

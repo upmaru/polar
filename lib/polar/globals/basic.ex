@@ -16,9 +16,15 @@ defmodule Polar.Globals.Basic do
     |> validate_number(:versions_per_product, less_than_or_equal_to: 3)
   end
 
-  def parse(value) do
+  def parse!(value) do
     %__MODULE__{}
     |> changeset(value)
     |> apply_action!(:insert)
+  end
+
+  def parse(value) do
+    %__MODULE__{}
+    |> changeset(value)
+    |> apply_action(:insert)
   end
 end

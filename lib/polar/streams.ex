@@ -23,6 +23,10 @@ defmodule Polar.Streams do
     to: Version.Manager,
     as: :create
 
+  defdelegate deactivate_previous_versions(version),
+    to: Version.Manager,
+    as: :deactivate_previous
+
   alias __MODULE__.Item
 
   defdelegate record_item_access(item, space_credential),
