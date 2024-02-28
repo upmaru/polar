@@ -1,10 +1,7 @@
 defmodule PolarWeb.RootLive do
   use PolarWeb, :live_view
 
-  alias Polar.Repo
-  alias Polar.Streams.Version
-
-  import Ecto.Query, only: [from: 2]
+  import __MODULE__.DataLoader
 
   @arch_colors %{
     "amd64" =>
@@ -20,6 +17,7 @@ defmodule PolarWeb.RootLive do
   }
 
   attr :filter, :map, default: %{}
+  attr :tabs, :list, default: []
 
   def render(assigns) do
     ~H"""
@@ -39,7 +37,6 @@ defmodule PolarWeb.RootLive do
               <%= gettext("opsmaru-images") %>
             </a>
             <%= gettext("repository.") %>
-            <span class="font-bold"><%= gettext("Click on an os to filter.") %></span>
           </p>
         </div>
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -48,9 +45,25 @@ defmodule PolarWeb.RootLive do
             patch={~p"/"}
             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
+            <.icon name="hero-x-circle" class="-ml-0.5 mr-1.5 h-5 w-5 text-white" />
             <%= gettext("Clear filter") %>
           </.link>
         </div>
+      </div>
+      <div class="mt-6">
+        <span class="isolate inline-flex rounded-md shadow-sm">
+          <%= for {tab, index} <- @tabs do %>
+            <.link
+              patch={~p"/?os=#{tab.os}"}
+              class={"relative gap-x-1.5 inline-flex items-center #{if index == 1, do: "rounded-l-md"} #{if index == Enum.count(@tabs), do: "rounded-r-md"} px-3 py-2 text-sm font-semibold #{if tab.os == @filter["os"], do: "text-white bg-indigo-500", else: "bg-white text-slate-900 hover:bg-gray-50"} ring-inset focus:z-10"}
+            >
+              <%= Phoenix.Naming.humanize(tab.os) %>
+              <span class="-mr-0.5 h-5 w-5 bg-white text-indigo-600 rounded-md text-center">
+                <%= tab.count %>
+              </span>
+            </.link>
+          <% end %>
+        </span>
       </div>
       <div class="mt-8 flow-root">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -150,6 +163,8 @@ defmodule PolarWeb.RootLive do
   end
 
   def mount(_params, _session, socket) do
+    tabs = load_tabs()
+
     socket =
       socket
       |> assign(:versions, [])
@@ -158,50 +173,20 @@ defmodule PolarWeb.RootLive do
       |> assign(:arch_colors, @arch_colors)
       |> assign(:os_colors, @os_colors)
       |> assign(:filter, %{})
+      |> assign(:tabs, tabs)
 
     {:ok, socket}
   end
 
-  def handle_params(%{"os" => os} = params, _uri, socket) do
-    versions =
-      from(
-        v in Version,
-        join: p in assoc(v, :product),
-        where: v.current_state == ^"active" and p.os == ^os,
-        preload: [{:product, p}],
-        order_by: [asc: p.os],
-        order_by: [desc: p.release],
-        order_by: [desc: v.inserted_at]
-      )
-      |> Repo.all()
-
+  def handle_params(params, _uri, socket) do
     filter = Map.take(params, ["os"])
+
+    versions = load_versions(filter)
 
     socket =
       socket
       |> assign(:versions, versions)
       |> assign(:filter, filter)
-
-    {:noreply, socket}
-  end
-
-  def handle_params(_, _uri, socket) do
-    versions =
-      from(
-        v in Version,
-        where: v.current_state == ^"active",
-        join: p in assoc(v, :product),
-        preload: [{:product, p}],
-        order_by: [asc: p.os],
-        order_by: [desc: p.release],
-        order_by: [desc: v.inserted_at]
-      )
-      |> Repo.all()
-
-    socket =
-      socket
-      |> assign(:versions, versions)
-      |> assign(:filter, %{})
 
     {:noreply, socket}
   end
