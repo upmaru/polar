@@ -1,4 +1,4 @@
-defmodule PolarWeb.RootControllerTest do
+defmodule PolarWeb.RootLiveTest do
   use PolarWeb.ConnCase
 
   alias Polar.Accounts

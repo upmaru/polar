@@ -21,13 +21,29 @@ defmodule PolarWeb.Router do
     plug PolarWeb.Plugs.ValidatePublishing
   end
 
-  scope "/", PolarWeb do
-    pipe_through :browser
+  # scope "/", PolarWeb do
+  #   pipe_through :browser
 
-    get "/", RootController, :show
-  end
+  #   live_session :current_user,
+  #     on_mount: [{PolarWeb.UserAuth, :mount_current_user}] do
+  #   end
+  # end
 
   ## Authentication routes
+
+  scope "/", PolarWeb do
+    pipe_through [:browser]
+
+    live_session :current_user,
+      on_mount: [{PolarWeb.UserAuth, :mount_current_user}] do
+      live "/", RootLive, :show
+
+      live "/users/confirm/:token", UserConfirmationLive, :edit
+      live "/users/confirm", UserConfirmationInstructionsLive, :new
+    end
+
+    delete "/users/log_out", UserSessionController, :delete
+  end
 
   scope "/", PolarWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
@@ -59,18 +75,6 @@ defmodule PolarWeb.Router do
 
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
-    end
-  end
-
-  scope "/", PolarWeb do
-    pipe_through [:browser]
-
-    delete "/users/log_out", UserSessionController, :delete
-
-    live_session :current_user,
-      on_mount: [{PolarWeb.UserAuth, :mount_current_user}] do
-      live "/users/confirm/:token", UserConfirmationLive, :edit
-      live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
 
