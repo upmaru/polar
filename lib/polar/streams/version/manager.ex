@@ -33,7 +33,7 @@ defmodule Polar.Streams.Version.Manager do
       order_by: [desc: :inserted_at]
     )
     |> Repo.all()
-    |> Enum.each(fn v ->
+    |> Enum.map(fn v ->
       Eventful.Transit.perform(v, bot, "deactivate")
     end)
   end
