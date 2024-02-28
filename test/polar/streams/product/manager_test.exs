@@ -1,10 +1,20 @@
 defmodule Polar.Streams.Product.ManagerTest do
   use Polar.DataCase, async: true
 
+  alias Polar.Accounts
   alias Polar.Streams
   alias Polar.Streams.Product
 
+  import Polar.AccountsFixtures
   import Polar.StreamsFixtures
+
+  setup do
+    password = Accounts.generate_automation_password()
+
+    _bot = bot_fixture(%{password: password})
+
+    :ok
+  end
 
   describe "filter" do
     setup do
