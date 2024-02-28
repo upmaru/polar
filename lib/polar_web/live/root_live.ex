@@ -169,8 +169,9 @@ defmodule PolarWeb.RootLive do
         join: p in assoc(v, :product),
         where: v.current_state == ^"active" and p.os == ^os,
         preload: [{:product, p}],
-        order_by: [asc: [p.os]],
-        order_by: [desc: [p.release]]
+        order_by: [asc: p.os],
+        order_by: [desc: p.release],
+        order_by: [desc: v.inserted_at]
       )
       |> Repo.all()
 
@@ -191,8 +192,9 @@ defmodule PolarWeb.RootLive do
         where: v.current_state == ^"active",
         join: p in assoc(v, :product),
         preload: [{:product, p}],
-        order_by: [asc: [p.os]],
-        order_by: [desc: [p.release]]
+        order_by: [asc: p.os],
+        order_by: [desc: p.release],
+        order_by: [desc: v.inserted_at]
       )
       |> Repo.all()
 
