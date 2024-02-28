@@ -5,6 +5,7 @@ defmodule PolarWeb.RootLiveTest do
   alias Polar.Streams
   alias Polar.Streams.Product
 
+  import Phoenix.LiveViewTest
   import Polar.AccountsFixtures
 
   setup do
@@ -81,5 +82,19 @@ defmodule PolarWeb.RootLiveTest do
     conn = get(build_conn(), "/")
 
     assert html_response(conn, 200)
+  end
+
+  describe "filter" do
+    test "render only filtered os" do
+      {:ok, _lv, html} = live(build_conn(), ~p"/?os=alpine")
+
+      assert html =~ "3.19"
+    end
+
+    test "does not render anything" do
+      {:ok, _lv, html} = live(build_conn(), ~p"/?os=strange")
+
+      refute html =~ "3.19"
+    end
   end
 end
