@@ -10,7 +10,7 @@
             <div class="ml-10 flex items-baseline space-x-4">
               <!-- Current: "bg-slate-900 text-white", Default: "" -->
               <.link
-                href={~p"/"}
+                navigate={~p"/"}
                 class={
                   if assigns[:current_path] == ~p"/",
                     do: "bg-slate-900 text-white rounded-md px-3 py-2 text-sm font-medium",
