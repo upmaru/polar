@@ -63,13 +63,13 @@ defmodule PolarWeb.RootLive do
                       scope="col"
                       class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                     >
-                      <%= gettext("Aliases") %>
+                      <%= gettext("OS") %>
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                       <%= gettext("Serial") %>
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      <%= gettext("OS") %>
+                      <%= gettext("Aliases") %>
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                       <%= gettext("Release") %>
@@ -89,16 +89,6 @@ defmodule PolarWeb.RootLive do
                   <%= for version <- @versions do %>
                     <tr>
                       <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                        <%= for alias <- version.product.aliases do %>
-                          <span class="inline-flex items-center rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-indigo-700">
-                            <%= alias %>
-                          </span>
-                        <% end %>
-                      </td>
-                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <%= version.serial %>
-                      </td>
-                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <.link patch={~p"/?os=#{version.product.os}"}>
                           <span class="inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-gray-900 ring-1 ring-inset ring-gray-200">
                             <svg
@@ -113,6 +103,16 @@ defmodule PolarWeb.RootLive do
                             <%= Phoenix.Naming.humanize(version.product.os) %>
                           </span>
                         </.link>
+                      </td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <%= version.serial %>
+                      </td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <%= for alias <- version.product.aliases do %>
+                          <span class="inline-flex items-center rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-indigo-700">
+                            <%= alias %>
+                          </span>
+                        <% end %>
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <%= version.product.release %>
