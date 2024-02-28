@@ -100,7 +100,7 @@
       <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
         <!-- Current: "bg-slate-900 text-white", Default: "text-slate-300 hover:bg-slate-700 hover:text-white" -->
         <.link
-          href={~p"/"}
+          navigate={~p"/"}
           class={
             if assigns[:current_path] == ~p"/",
               do: "bg-slate-900 text-white block rounded-md px-3 py-2 text-base font-medium",
@@ -112,7 +112,7 @@
           <%= gettext("Home") %>
         </.link>
         <.link
-          href={~p"/dashboard"}
+          navigate={~p"/dashboard"}
           class={
             if assigns[:current_path] == ~p"/dashboard",
               do: "bg-slate-900 text-white block rounded-md px-3 py-2 text-base font-medium",
