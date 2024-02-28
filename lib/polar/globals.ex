@@ -37,12 +37,14 @@ defmodule Polar.Globals do
     module = Map.fetch!(@mappings, key)
 
     case module.parse(value) do
-      {:ok, params} ->
+      {:ok, params} = result ->
         value =
           Map.from_struct(params)
           |> :erlang.term_to_binary()
 
-        Repo.insert(%Setting{key: key, value: value})
+        Repo.insert!(%Setting{key: key, value: value})
+
+        result
 
       error ->
         error
@@ -53,14 +55,16 @@ defmodule Polar.Globals do
     module = Map.fetch!(@mappings, setting.key)
 
     case module.parse(value) do
-      {:ok, params} ->
+      {:ok, params} = result ->
         value =
           Map.from_struct(params)
           |> :erlang.term_to_binary()
 
         setting
         |> Setting.changeset(%{value: value})
-        |> Repo.update()
+        |> Repo.update!()
+
+        result
 
       error ->
         error

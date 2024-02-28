@@ -7,8 +7,7 @@ defmodule Polar.GlobalsTest do
     test "can create basic setting" do
       {:ok, setting} = Polar.Globals.save("basic", %{versions_per_product: 3})
 
-      assert setting.key == "basic"
-      assert %{versions_per_product: 3} = :erlang.binary_to_term(setting.value)
+      assert %Basic{versions_per_product: 3} = setting
     end
   end
 
@@ -34,7 +33,7 @@ defmodule Polar.GlobalsTest do
     test "can change basic setting" do
       {:ok, setting} = Polar.Globals.save("basic", %{versions_per_product: 2})
 
-      assert %{versions_per_product: 2} = :erlang.binary_to_term(setting.value)
+      assert %Basic{versions_per_product: 2} = setting
     end
   end
 end
