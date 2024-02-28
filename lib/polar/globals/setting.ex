@@ -14,5 +14,6 @@ defmodule Polar.Globals.Setting do
     setting
     |> cast(attrs, [:key, :value])
     |> validate_required([:key, :value])
+    |> validate_inclusion(:key, ["basic"])
   end
 end

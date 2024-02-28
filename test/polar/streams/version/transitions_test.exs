@@ -1,12 +1,17 @@
 defmodule Polar.Streams.Version.TransitionsTest do
   use Polar.DataCase, async: true
 
+  alias Polar.Accounts
   alias Polar.Streams
 
   import Polar.AccountsFixtures
 
   setup do
     user = user_fixture()
+
+    password = Accounts.generate_automation_password()
+
+    _bot = bot_fixture(%{password: password})
 
     {:ok, product} =
       Streams.create_product(%{

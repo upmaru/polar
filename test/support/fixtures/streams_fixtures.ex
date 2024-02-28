@@ -13,7 +13,7 @@ defmodule Polar.StreamsFixtures do
     }
   end
 
-  def valid_version_attributes() do
+  def valid_version_attributes(serial \\ 1) do
     hash1 =
       :crypto.strong_rand_bytes(32)
       |> Base.encode16()
@@ -25,12 +25,13 @@ defmodule Polar.StreamsFixtures do
       |> String.downcase()
 
     %{
-      serial: "20240209_13:00",
+      serial: "20240209-#{serial}",
       items: [
         %{
           name: "lxd.tar.gz",
           file_type: "lxd.tar.gz",
           hash: hash1,
+          is_metadata: true,
           size: 876,
           path: "images/alpine/edge/amd64/default/20240209_13:00/incus.tar.xz"
         },

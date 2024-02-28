@@ -12,6 +12,10 @@ defmodule Polar.Streams.Item.ManagerTest do
   setup do
     user = user_fixture()
 
+    password = Accounts.generate_automation_password()
+
+    _bot = bot_fixture(%{password: password})
+
     {:ok, space} = Accounts.create_space(user, %{name: "test-item-increment"})
 
     {:ok, credential} =
