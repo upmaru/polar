@@ -13,6 +13,14 @@ defmodule PolarWeb.RootLive do
       "inline-flex items-center rounded-full bg-cyan-100 px-2 py-1 text-xs font-medium text-cyan-700"
   }
 
+  @os_colors %{
+    "alpine" => "h-1.5 w-1.5 fill-cyan-500",
+    "debian" => "h-1.5 w-1.5 fill-red-500",
+    "ubuntu" => "h-1.5 w-1.5 fill-amber-500"
+  }
+
+  attr :filter, :map, default: %{}
+
   def render(assigns) do
     ~H"""
     <div class="px-4 sm:px-0">
@@ -31,7 +39,17 @@ defmodule PolarWeb.RootLive do
               <%= gettext("opsmaru-images") %>
             </a>
             <%= gettext("repository.") %>
+            <span class="font-bold"><%= gettext("Click on an os to filter.") %></span>
           </p>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <.link
+            :if={!Enum.empty?(@filter)}
+            patch={~p"/"}
+            class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            <%= gettext("Clear filter") %>
+          </.link>
         </div>
       </div>
       <div class="mt-8 flow-root">
@@ -60,6 +78,9 @@ defmodule PolarWeb.RootLive do
                       <%= gettext("Arch") %>
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      <%= gettext("Variant") %>
+                    </th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                       <%= gettext("Published At") %>
                     </th>
                   </tr>
@@ -78,15 +99,37 @@ defmodule PolarWeb.RootLive do
                         <%= version.serial %>
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <%= version.product.os %>
+                        <.link patch={~p"/?os=#{version.product.os}"}>
+                          <span class="inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-gray-900 ring-1 ring-inset ring-gray-200">
+                            <svg
+                              class={
+                                Map.get(@os_colors, version.product.os, "h-1.5 w-1.5 fill-gray-500")
+                              }
+                              viewBox="0 0 6 6"
+                              aria-hidden="true"
+                            >
+                              <circle cx="3" cy="3" r="3" />
+                            </svg>
+                            <%= Phoenix.Naming.humanize(version.product.os) %>
+                          </span>
+                        </.link>
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <%= version.product.release %>
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <span class={Map.fetch!(@arch_colors, version.product.arch)}>
+                        <span class={
+                          Map.get(
+                            @arch_colors,
+                            version.product.arch,
+                            "inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600"
+                          )
+                        }>
                           <%= version.product.arch %>
                         </span>
+                      </td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <%= version.product.variant %>
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <%= Calendar.strftime(
@@ -107,6 +150,41 @@ defmodule PolarWeb.RootLive do
   end
 
   def mount(_params, _session, socket) do
+    socket =
+      socket
+      |> assign(:versions, [])
+      |> assign(:page_title, gettext("OpsMaru Images"))
+      |> assign(:current_path, ~p"/")
+      |> assign(:arch_colors, @arch_colors)
+      |> assign(:os_colors, @os_colors)
+      |> assign(:filter, %{})
+
+    {:ok, socket}
+  end
+
+  def handle_params(%{"os" => os} = params, _uri, socket) do
+    versions =
+      from(
+        v in Version,
+        join: p in assoc(v, :product),
+        where: v.current_state == ^"active" and p.os == ^os,
+        preload: [{:product, p}],
+        order_by: [asc: [p.os]],
+        order_by: [desc: [p.release]]
+      )
+      |> Repo.all()
+
+    filter = Map.take(params, ["os"])
+
+    socket =
+      socket
+      |> assign(:versions, versions)
+      |> assign(:filter, filter)
+
+    {:noreply, socket}
+  end
+
+  def handle_params(_, _uri, socket) do
     versions =
       from(
         v in Version,
@@ -121,10 +199,8 @@ defmodule PolarWeb.RootLive do
     socket =
       socket
       |> assign(:versions, versions)
-      |> assign(:page_title, gettext("OpsMaru Images"))
-      |> assign(:current_path, ~p"/")
-      |> assign(:arch_colors, @arch_colors)
+      |> assign(:filter, %{})
 
-    {:ok, socket}
+    {:noreply, socket}
   end
 end
