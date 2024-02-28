@@ -51,10 +51,12 @@ defmodule PolarWeb.Dashboard.SpaceLive do
           id={"credential_#{credential.id}"}
           class="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6"
         >
-          <.link navigate={~p"/dashboard/spaces/#{credential.space_id}/credentials/#{credential.id}"}>
-            <div class="min-w-0">
+          <div class="min-w-0">
+            <.link navigate={
+              ~p"/dashboard/spaces/#{credential.space_id}/credentials/#{credential.id}"
+            }>
               <div class="flex items-start gap-x-3">
-                <p class="text-sm font-semibold leading-6 text-gray-900"><%= credential.name %></p>
+                <p class="text-sm font-semibold leading-6 text-indigo-500"><%= credential.name %></p>
               </div>
               <div class="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                 <p class="whitespace-nowrap">
@@ -77,16 +79,16 @@ defmodule PolarWeb.Dashboard.SpaceLive do
                   <% end %>
                 </p>
               </div>
-            </div>
-            <div class="flex flex-none items-center gap-x-4">
-              <.link
-                navigate={~p"/dashboard/spaces/#{credential.space_id}/credentials/#{credential.id}"}
-                class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
-              >
-                <%= gettext("View credential") %>
-              </.link>
-            </div>
-          </.link>
+            </.link>
+          </div>
+          <div class="flex flex-none items-center gap-x-4">
+            <.link
+              navigate={~p"/dashboard/spaces/#{credential.space_id}/credentials/#{credential.id}"}
+              class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+            >
+              <%= gettext("View credential") %>
+            </.link>
+          </div>
         </li>
       </ul>
     </div>

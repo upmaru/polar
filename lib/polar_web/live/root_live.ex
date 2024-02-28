@@ -2,7 +2,6 @@ defmodule PolarWeb.RootLive do
   use PolarWeb, :live_view
 
   alias Polar.Repo
-  alias Polar.Streams
   alias Polar.Streams.Version
 
   import Ecto.Query, only: [from: 2]

@@ -48,10 +48,10 @@ defmodule PolarWeb.DashboardLive do
           id={"space_#{space.id}"}
           class="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6"
         >
-          <.link navigate={~p"/dashboard/spaces/#{space.id}"}>
-            <div class="min-w-0">
+          <div class="min-w-0">
+            <.link navigate={~p"/dashboard/spaces/#{space.id}"}>
               <div class="flex items-start gap-x-3">
-                <p class="text-sm font-semibold leading-6 text-gray-900"><%= space.name %></p>
+                <p class="text-sm font-semibold leading-6 text-indigo-600"><%= space.name %></p>
               </div>
               <div class="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                 <p class="whitespace-nowrap">
@@ -65,16 +65,16 @@ defmodule PolarWeb.DashboardLive do
                 </svg>
                 <p class="truncate"><%= gettext("Owned by") %> <%= space.owner.email %></p>
               </div>
-            </div>
-            <div class="flex flex-none items-center gap-x-4">
-              <.link
-                navigate={~p"/dashboard/spaces/#{space.id}"}
-                class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
-              >
-                <%= gettext("View space") %>
-              </.link>
-            </div>
-          </.link>
+            </.link>
+          </div>
+          <div class="flex flex-none items-center gap-x-4">
+            <.link
+              navigate={~p"/dashboard/spaces/#{space.id}"}
+              class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+            >
+              <%= gettext("View space") %>
+            </.link>
+          </div>
         </li>
       </ul>
     </div>

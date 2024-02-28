@@ -72,7 +72,7 @@ defmodule PolarWeb.DashboardLiveTest do
       {:ok, lv, _html} = live(conn, ~p"/dashboard")
 
       lv
-      |> element("#space_#{space.id} a", "View space")
+      |> element("#space_#{space.id} a", space.name)
       |> render_click()
 
       assert_redirect(lv, ~p"/dashboard/spaces/#{space.id}")
