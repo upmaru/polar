@@ -168,7 +168,7 @@ defmodule PolarWeb.RootLive do
     socket =
       socket
       |> assign(:versions, [])
-      |> assign(:page_title, gettext("OpsMaru Images"))
+      |> assign(:page_title, gettext("LXD / Incus Image Server"))
       |> assign(:current_path, ~p"/")
       |> assign(:arch_colors, @arch_colors)
       |> assign(:os_colors, @os_colors)
