@@ -1,32 +1,242 @@
-<header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
-    <div class="flex items-center gap-4">
-      <a href="/">
-        <img src={~p"/images/logo.svg"} width="36" />
-      </a>
-      <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
-        v<%= Application.spec(:phoenix, :vsn) %>
-      </p>
+<div class="min-h-full">
+  <nav class="bg-slate-950">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <img class="h-8 w-8" src={~p"/images/opsmaru-logo.png"} alt="OpsMaru" />
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+              <!-- Current: "bg-slate-900 text-white", Default: "" -->
+              <.link
+                navigate={~p"/"}
+                class={
+                  if assigns[:current_path] == ~p"/",
+                    do: "bg-slate-900 text-white rounded-md px-3 py-2 text-sm font-medium",
+                    else:
+                      "rounded-md px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-900 hover:text-white"
+                }
+                aria-current="page"
+              >
+                <%= gettext("Home") %>
+              </.link>
+              <.link
+                navigate={~p"/dashboard"}
+                class={
+                  if assigns[:current_path] == ~p"/dashboard",
+                    do: "bg-slate-900 text-white rounded-md px-3 py-2 text-sm font-medium",
+                    else:
+                      "rounded-md px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-900 hover:text-white"
+                }
+                aria-current="page"
+              >
+                <%= gettext("Dashboard") %>
+              </.link>
+            </div>
+          </div>
+        </div>
+        <div class="hidden md:block">
+          <div class="ml-4 flex items-center md:ml-6">
+            <%= if @current_user do %>
+              <.link
+                navigate={~p"/users/settings"}
+                class={
+                  if assigns[:current_path] == ~p"/users/settings",
+                    do: "bg-slate-900 text-white rounded-md px-3 py-2 text-sm font-medium",
+                    else:
+                      "rounded-md px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-900 hover:text-white"
+                }
+              >
+                <%= @current_user.email %>
+              </.link>
+              <.link
+                href={~p"/users/log_out"}
+                method="delete"
+                class="text-slate-300 rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-900 hover:text-white"
+              >
+                <%= gettext("Log out") %>
+              </.link>
+            <% else %>
+              <.link
+                navigate={~p"/users/log_in"}
+                class="text-slate-300 rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-900 hover:text-white"
+              >
+                <%= gettext("Sign In") %>
+              </.link>
+              <.link
+                navigate={~p"/users/register"}
+                class="text-slate-300 rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-900 hover:text-white"
+              >
+                <%= gettext("Register") %>
+              </.link>
+            <% end %>
+          </div>
+        </div>
+        <div class="-mr-2 flex md:hidden">
+          <!-- Mobile menu button -->
+          <button
+            phx-click={
+              JS.toggle(
+                to: "#mobile-menu",
+                in: {"transition ease-in duration-100", "opacity-0", "opacity-100"},
+                out: {"transition ease-in duration-100", "opacity-100", "opacity-0"}
+              )
+            }
+            type="button"
+            class="relative inline-flex items-center justify-center rounded-md bg-slate-800 p-2 text-slate-400 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-800"
+            aria-controls="mobile-menu"
+          >
+            <span class="absolute -inset-0.5"></span>
+            <span class="sr-only"><%= gettext("Open menu") %></span>
+            <!-- Menu open: "hidden", Menu closed: "block" -->
+            <.icon name="hero-bars-3" class="h-6 w-6" />
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <a href="https://twitter.com/elixirphoenix" class="hover:text-zinc-700">
-        @elixirphoenix
-      </a>
-      <a href="https://github.com/phoenixframework/phoenix" class="hover:text-zinc-700">
-        GitHub
-      </a>
-      <a
-        href="https://hexdocs.pm/phoenix/overview.html"
-        class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-      >
-        Get Started <span aria-hidden="true">&rarr;</span>
-      </a>
+    <!-- Mobile menu, show/hide based on menu state. -->
+    <div class="hidden" id="mobile-menu">
+      <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+        <!-- Current: "bg-slate-900 text-white", Default: "text-slate-300 hover:bg-slate-700 hover:text-white" -->
+        <.link
+          navigate={~p"/"}
+          class={
+            if assigns[:current_path] == ~p"/",
+              do: "bg-slate-900 text-white block rounded-md px-3 py-2 text-base font-medium",
+              else:
+                "text-slate-300 hover:bg-slate-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+          }
+          aria-current="page"
+        >
+          <%= gettext("Home") %>
+        </.link>
+        <.link
+          navigate={~p"/dashboard"}
+          class={
+            if assigns[:current_path] == ~p"/dashboard",
+              do: "bg-slate-900 text-white block rounded-md px-3 py-2 text-base font-medium",
+              else:
+                "text-slate-300 hover:bg-slate-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+          }
+          aria-current="page"
+        >
+          <%= gettext("Dashboard") %>
+        </.link>
+      </div>
+      <div class="border-t border-slate-700 pb-3 pt-4">
+        <div class="mt-3 space-y-1 px-2">
+          <%= if @current_user do %>
+            <.link
+              navigate={~p"/users/settings"}
+              class="block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-white"
+            >
+              <%= @current_user.email %>
+            </.link>
+            <.link
+              href={~p"/users/log_out"}
+              method="delete"
+              class="block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-white"
+            >
+              <%= gettext("Log out") %>
+            </.link>
+          <% else %>
+            <.link
+              navigate={~p"/users/log_in"}
+              class="block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-white"
+            >
+              <%= gettext("Sign in") %>
+            </.link>
+            <.link
+              navigate={~p"/users/register"}
+              class="block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-white"
+            >
+              <%= gettext("Register") %>
+            </.link>
+          <% end %>
+        </div>
+      </div>
     </div>
+  </nav>
+</div>
+<header class="bg-slate-900 shadow">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-50">
+      <%= assigns[:page_title] || "Polar Image Server" %>
+    </h1>
   </div>
 </header>
-<main class="px-4 py-20 sm:px-6 lg:px-8">
-  <div class="mx-auto max-w-2xl">
-    <.flash_group flash={@flash} />
+<main>
+  <.flash_group flash={@flash} />
+  <div class="mx-auto max-w-7xl pt-10 sm:px-6 lg:px-8">
     <%= @inner_content %>
   </div>
 </main>
+<footer>
+  <div class="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
+    <div class="flex justify-center space-x-6 md:order-2">
+      <a
+        href="https://discord.gg/DjagkUs6QW"
+        target="_blank"
+        class="text-slate-400 hover:text-slate-500"
+      >
+        <span class="sr-only">Discord</span>
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor">
+          <path d="M9.555 9.23c-.74 0-1.324.624-1.324 1.385S8.827 12 9.555 12c.739 0 1.323-.624 1.323-1.385.013-.761-.584-1.385-1.323-1.385Zm4.737 0c-.74 0-1.324.624-1.324 1.385S13.564 12 14.292 12c.74 0 1.324-.624 1.324-1.385s-.584-1.385-1.324-1.385Z">
+          </path>
+          <path d="M20.404 0H3.442c-.342 0-.68.065-.995.19a2.614 2.614 0 0 0-.843.536 2.46 2.46 0 0 0-.562.801c-.13.3-.197.62-.196.944v16.225c0 .324.066.645.196.944.13.3.321.572.562.801.241.23.527.412.843.537.315.124.653.189.995.19h14.354l-.67-2.22 1.62 1.428 1.532 1.344L23 24V2.472c0-.324-.066-.644-.196-.944a2.46 2.46 0 0 0-.562-.8A2.614 2.614 0 0 0 21.4.19a2.726 2.726 0 0 0-.995-.19V0Zm-4.886 15.672s-.456-.516-.836-.972c1.659-.444 2.292-1.428 2.292-1.428a7.38 7.38 0 0 1-1.456.707 8.67 8.67 0 0 1-1.836.517 9.347 9.347 0 0 1-3.279-.012 11.074 11.074 0 0 1-1.86-.516 7.621 7.621 0 0 1-.924-.409c-.039-.023-.076-.035-.113-.06-.027-.011-.04-.023-.052-.035-.228-.12-.354-.204-.354-.204s.608.96 2.215 1.416c-.38.456-.848.996-.848.996-2.797-.084-3.86-1.824-3.86-1.824 0-3.864 1.822-6.996 1.822-6.996 1.823-1.296 3.557-1.26 3.557-1.26l.127.145c-2.278.623-3.33 1.57-3.33 1.57s.279-.143.747-.347c1.355-.564 2.43-.72 2.873-.756.077-.012.14-.024.216-.024a10.804 10.804 0 0 1 6.368 1.129s-1.001-.9-3.153-1.526l.178-.19s1.735-.037 3.557 1.259c0 0 1.823 3.133 1.823 6.996 0 0-1.076 1.74-3.874 1.824Z">
+          </path>
+        </svg>
+      </a>
+      <a
+        href="https://x.com/opsmarudev"
+        target="_blank"
+        class="text-slate-400 hover:text-slate-500"
+      >
+        <span class="sr-only">X</span>
+        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" />
+        </svg>
+      </a>
+      <a
+        href="https://github.com/upmaru/polar"
+        target="_blank"
+        class="text-slate-400 hover:text-slate-500"
+      >
+        <span class="sr-only">GitHub</span>
+        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </a>
+      <a
+        href="https://www.youtube.com/@devops-show"
+        target="_blank"
+        class="text-slate-400 hover:text-slate-500"
+      >
+        <span class="sr-only">YouTube</span>
+        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </a>
+    </div>
+    <div class="mt-8 md:order-1 md:mt-0">
+      <p class="text-center text-sm leading-5 text-slate-400">
+        &copy; <%= DateTime.utc_now().year %> Upmaru, Inc. All rights reserved. Deployed using <a
+          href="https://opsmaru.com"
+          class="font-semibold text-brand hover:underline"
+          target="_blank"
+        >
+          OpsMaru
+        </a>.
+      </p>
+    </div>
+  </div>
+</footer>

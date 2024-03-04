@@ -20,6 +20,20 @@ if System.get_env("PHX_SERVER") do
   config :polar, PolarWeb.Endpoint, server: true
 end
 
+default_cdn_host =
+  System.get_env("DEFAULT_CDN_HOST") ||
+    raise """
+    environment variable DEFAULT_CDN_HOST is missing.
+    """
+
+config :polar, Polar.Assets,
+  access_key_id: System.get_env("AWS_S3_ACCESS_KEY_ID"),
+  secret_access_key: System.get_env("AWS_S3_SECRET_ACCESS_KEY"),
+  region: System.get_env("AWS_S3_REGION"),
+  bucket: System.get_env("AWS_S3_BUCKET"),
+  endpoint: System.get_env("AWS_S3_ENDPOINT"),
+  default_cdn_host: default_cdn_host
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
@@ -30,11 +44,40 @@ if config_env() == :prod do
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
-  config :polar, Polar.Repo,
-    # ssl: true,
-    url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-    socket_options: maybe_ipv6
+  if cacert_pem = System.get_env("DATABASE_CERT_PEM") do
+    %URI{host: db_host} = URI.parse(database_url)
+
+    cacert_options =
+      if cacert_pem do
+        [
+          cacerts:
+            cacert_pem
+            |> X509.from_pem()
+            |> Enum.map(&X509.Certificate.to_der/1)
+        ]
+      else
+        [
+          cacertfile: System.get_env("DATABASE_CERT_PATH") || "/etc/ssl/cert.pem"
+        ]
+      end
+
+    config :polar, Polar.Repo,
+      ssl: true,
+      url: database_url,
+      ssl_opts:
+        [
+          verify: :verify_peer,
+          server_name_indication: to_charlist(db_host),
+          customize_hostname_check: [
+            match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+          ]
+        ]
+        |> Keyword.merge(cacert_options)
+  else
+    config :polar, Polar.Repo,
+      url: database_url,
+      socket_options: maybe_ipv6
+  end
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
@@ -103,10 +146,10 @@ if config_env() == :prod do
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
   #
-  #     config :polar, Polar.Mailer,
-  #       adapter: Swoosh.Adapters.Mailgun,
-  #       api_key: System.get_env("MAILGUN_API_KEY"),
-  #       domain: System.get_env("MAILGUN_DOMAIN")
+  config :polar, Polar.Mailer,
+    adapter: Swoosh.Adapters.Postmark,
+    api_key: System.get_env("POSTMARK_API_KEY")
+
   #
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:

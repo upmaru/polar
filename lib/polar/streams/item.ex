@@ -31,6 +31,8 @@ defmodule Polar.Streams.Item do
 
     field :is_metadata, :boolean, default: false
 
+    embeds_many :combined_hashes, __MODULE__.CombinedHash
+
     belongs_to :version, Version
 
     timestamps(type: :utc_datetime_usec)
@@ -41,5 +43,6 @@ defmodule Polar.Streams.Item do
     item
     |> cast(attrs, @valid_attrs)
     |> validate_required(@required_attrs)
+    |> cast_embed(:combined_hashes)
   end
 end

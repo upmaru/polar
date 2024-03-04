@@ -4,7 +4,7 @@ defmodule Polar.Repo.Migrations.CreateSettings do
   def change do
     create table(:settings) do
       add :key, :citext, null: false
-      add :value, :map, default: %{}, null: false
+      add :value, :binary, null: false
 
       timestamps(type: :utc_datetime_usec)
     end

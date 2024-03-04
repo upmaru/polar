@@ -1,18 +1,41 @@
 # Polar
 
-To start your Phoenix server:
+Polar is an image server for LXD / Incus. It has some useful features like:
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
++ Per `space` credential generation.
++ Feed specific to incus / lxd, you can choose when creating credentials.
++ Users can create `spaces` to manage multiple credentials.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+The build system for polar is called [icepak](https://github.com/upmaru/icepak). It's designed to run as a github action, you can see it in action [here](https://github.com/upmaru/opsmaru-images).
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Demo
 
-## Learn more
++ [Sandbox Site](https://images.opsmaru.dev)
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+## Basic Architecture
+
+![basic design](/design.png)
+
+## Development
+
+Make sure you have Elixir / OTP installed. If you have asdf in your environment simply run 
+
+```shell
+asdf install
+```
+
+### Install Dependencies
+
+Install dependencies using mix:
+
+```shell
+mix deps.get
+```
+
+### Start Server
+
+You can start the server with the following command. It will be hosted on port 4000
+
+```shell
+iex -S mix phx.server
+```
