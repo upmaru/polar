@@ -37,7 +37,7 @@ config :polar, Polar.Assets,
 cloak_key =
   System.get_env("CLOAK_KEY") || System.get_env("POLAR_CLOAK_KEY") ||
     raise """
-    environment variable CLOAK_KEY or INSTELLAR_CLOAK_KEY is missing.
+    environment variable CLOAK_KEY or POLAR_CLOAK_KEY is missing.
     You can generate one using 32 |> :crypto.strong_rand_bytes() |> Base.encode64()
     """
 

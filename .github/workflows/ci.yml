@@ -151,3 +151,4 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
           DEFAULT_CDN_HOST: some.domain.com
+          POLAR_CLOAK_KEY: ${{secrets.POLAR_CLOAK_KEY}}
