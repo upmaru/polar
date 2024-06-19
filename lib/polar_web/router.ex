@@ -104,6 +104,10 @@ defmodule PolarWeb.Router do
       resources "/products", ProductController, only: [:show] do
         resources "/versions", VersionController, only: [:create]
       end
+
+      scope "/versions/:version_id", Version, as: :version do
+        resources "/events", EventController, only: [:create]
+      end
     end
   end
 
