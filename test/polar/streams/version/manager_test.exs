@@ -36,19 +36,32 @@ defmodule Polar.Streams.Version.ManagerTest do
   end
 
   describe "deactivate old version on create" do
-    setup %{product: product} do
+    setup %{product: product, bot: bot} do
       {:ok, version} =
         Streams.create_version(product, valid_version_attributes(2))
 
-      %{existing_version: version}
+      {:ok, %{resource: testing_version}} =
+        Eventful.Transit.perform(version, bot, "test")
+
+      {:ok, %{resource: active_version}} =
+        Eventful.Transit.perform(testing_version, bot, "activate")
+
+      %{existing_version: active_version}
     end
 
     test "activating a new version deactivates old versions", %{
       product: product,
+      bot: bot,
       existing_version: existing_version
     } do
-      assert {:ok, _version} =
+      assert {:ok, version} =
                Streams.create_version(product, valid_version_attributes(3))
+
+      {:ok, %{resource: testing_version}} =
+        Eventful.Transit.perform(version, bot, "test")
+
+      {:ok, %{resource: _active_version}} =
+        Eventful.Transit.perform(testing_version, bot, "activate")
 
       existing_version = Repo.reload(existing_version)
 
@@ -57,25 +70,44 @@ defmodule Polar.Streams.Version.ManagerTest do
   end
 
   describe "keep 2 previous version" do
-    setup %{product: product} do
+    setup %{product: product, bot: bot} do
       Polar.Globals.save("basic", %{versions_per_product: 2})
 
       {:ok, version3} =
         Streams.create_version(product, valid_version_attributes(3))
 
+      {:ok, %{resource: testing_version3}} =
+        Eventful.Transit.perform(version3, bot, "test")
+
+      {:ok, %{resource: active_version3}} =
+        Eventful.Transit.perform(testing_version3, bot, "activate")
+
       {:ok, version4} =
         Streams.create_version(product, valid_version_attributes(4))
 
-      %{existing_version: version4, to_be_inactive: version3}
+      {:ok, %{resource: testing_version4}} =
+        Eventful.Transit.perform(version4, bot, "test")
+
+      {:ok, %{resource: active_version4}} =
+        Eventful.Transit.perform(testing_version4, bot, "activate")
+
+      %{existing_version: active_version4, to_be_inactive: active_version3}
     end
 
-    test "create new version deactivate version 3", %{
+    test "create and activate new version deactivate version 3", %{
       product: product,
+      bot: bot,
       existing_version: existing_version,
       to_be_inactive: to_be_inactive
     } do
-      assert {:ok, _version} =
+      assert {:ok, version} =
                Streams.create_version(product, valid_version_attributes(5))
+
+      {:ok, %{resource: testing_version}} =
+        Eventful.Transit.perform(version, bot, "test")
+
+      {:ok, %{resource: _active_version}} =
+        Eventful.Transit.perform(testing_version, bot, "activate")
 
       to_be_inactive = Repo.reload(to_be_inactive)
 
