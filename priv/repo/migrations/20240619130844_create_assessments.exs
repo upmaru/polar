@@ -9,7 +9,7 @@ defmodule Polar.Repo.Migrations.CreateAssessments do
       add :version_id, references(:versions, on_delete: :restrict), null: false
       add :cluster_id, references(:clusters, on_delete: :restrict), null: false
 
-      timestamps(type: :utc_datetime_utc)
+      timestamps(type: :utc_datetime_usec)
     end
 
     create index(:assessments, [:check_id])

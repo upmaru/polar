@@ -5,7 +5,6 @@ defmodule Polar.Machines.Assessment do
   alias Polar.Streams
   alias Polar.Machines.Check
   alias Polar.Machines.Cluster
-  s
 
   schema "assessments" do
     field :current_state, :string, default: "created"
@@ -15,7 +14,7 @@ defmodule Polar.Machines.Assessment do
 
     belongs_to :version, Streams.Version
 
-    timestamps(type: :utc_datetime)
+    timestamps(type: :utc_datetime_usec)
   end
 
   @doc false

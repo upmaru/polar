@@ -1,4 +1,4 @@
-defp Polar.Machines.Cluster do
+defmodule Polar.Machines.Cluster.Manager do
   alias Polar.Repo
   alias Polar.Machines.Cluster
 

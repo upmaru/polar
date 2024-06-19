@@ -18,7 +18,7 @@ defmodule Polar.Machines.Cluster do
 
     field :credential, Polar.Encrypted.Map
 
-    timestamps(type: :utc_datetime)
+    timestamps(type: :utc_datetime_usec)
   end
 
   @doc false

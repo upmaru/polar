@@ -1,7 +1,7 @@
 defmodule Polar.Machines do
-  alias __MODULE__.Manager
+  alias __MODULE__.Cluster
 
   defdelegate create_cluster(params),
-    to: Manager,
+    to: Cluster.Manager,
     as: :create
 end
