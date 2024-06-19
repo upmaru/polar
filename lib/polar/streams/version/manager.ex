@@ -9,18 +9,9 @@ defmodule Polar.Streams.Version.Manager do
     %Version{product_id: product.id}
     |> Version.changeset(attrs)
     |> Repo.insert()
-    |> case do
-      {:ok, version} = result ->
-        deactivate_previous(version)
-
-        result
-
-      error ->
-        error
-    end
   end
 
-  def deactivate_previous(version) do
+  def deactivate_previous(event, version) do
     basic_setting = Globals.get("basic")
     bot = Polar.Accounts.Automation.get_bot!()
 
@@ -34,7 +25,10 @@ defmodule Polar.Streams.Version.Manager do
     )
     |> Repo.all()
     |> Enum.map(fn v ->
-      Eventful.Transit.perform(v, bot, "deactivate")
+      Eventful.Transit.perform(v, bot, "deactivate",
+        comment: "New version activated.",
+        parameters: %{"event_id" => event.id}
+      )
     end)
   end
 end

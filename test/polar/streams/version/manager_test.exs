@@ -10,7 +10,7 @@ defmodule Polar.Streams.Version.ManagerTest do
   setup do
     password = Accounts.generate_automation_password()
 
-    _bot = bot_fixture(%{password: password})
+    bot = bot_fixture(%{password: password})
 
     {:ok, product} =
       Streams.create_product(%{
@@ -25,7 +25,7 @@ defmodule Polar.Streams.Version.ManagerTest do
         }
       })
 
-    {:ok, product: product}
+    {:ok, product: product, bot: bot}
   end
 
   describe "create_version" do
@@ -43,7 +43,7 @@ defmodule Polar.Streams.Version.ManagerTest do
       %{existing_version: version}
     end
 
-    test "creating a new version deactivates old versions", %{
+    test "activating a new version deactivates old versions", %{
       product: product,
       existing_version: existing_version
     } do
