@@ -34,6 +34,21 @@ config :polar, Polar.Assets,
   endpoint: System.get_env("AWS_S3_ENDPOINT"),
   default_cdn_host: default_cdn_host
 
+cloak_key =
+  System.get_env("CLOAK_KEY") || System.get_env("POLAR_CLOAK_KEY") ||
+    raise """
+    environment variable CLOAK_KEY or INSTELLAR_CLOAK_KEY is missing.
+    You can generate one using 32 |> :crypto.strong_rand_bytes() |> Base.encode64()
+    """
+
+config :polar, Polar.Vault,
+  ciphers: [
+    default: {
+      Cloak.Ciphers.AES.GCM,
+      tag: "AES.GCM.V1", key: Base.decode64!(cloak_key)
+    }
+  ]
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

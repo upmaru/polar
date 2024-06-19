@@ -11,6 +11,8 @@ config :polar,
   ecto_repos: [Polar.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :polar, Polar.Vault, json_library: Jason
+
 # Configures the endpoint
 config :polar, PolarWeb.Endpoint,
   url: [host: "localhost"],

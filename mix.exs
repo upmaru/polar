@@ -71,6 +71,9 @@ defmodule Polar.MixProject do
       # Cert
       {:x509, "~> 0.8"},
 
+      # Encryption
+      {:cloak_ecto, "~> 1.3"},
+
       # Dev / Test
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
