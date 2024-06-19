@@ -6,6 +6,8 @@ defmodule PolarWeb.Dashboard.Credential.NewLive do
   alias Polar.Accounts
   alias Polar.Accounts.Space
 
+  alias Polar.Streams.ReleaseChannel
+
   def render(assigns) do
     ~H"""
     <div class="space-y-10 divide-y divide-gray-900/10">
@@ -67,6 +69,40 @@ defmodule PolarWeb.Dashboard.Credential.NewLive do
               <div class="col-span-full">
                 <div class="flex items-center justify-between">
                   <h2 class="text-sm font-medium leading-6 text-gray-900">
+                    <%= gettext("Release channel") %>
+                  </h2>
+                </div>
+                <fieldset class="mt-2">
+                  <legend class="sr-only"><%= gettext("Choose release channel") %></legend>
+                  <input
+                    type="hidden"
+                    name={@credential_form[:release_channel].name}
+                    value={@credential_form.source.changes[:release_channel]}
+                  />
+                  <div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                    <label
+                      :for={channel <- ReleaseChannel.valid_names()}
+                      for={Phoenix.HTML.Form.input_id(:credential, :release_channel, channel)}
+                      class={[
+                        "flex items-center justify-center rounded-md py-3 px-3 text-sm font-semibold sm:flex-1 cursor-pointer focus:outline-none",
+                        "#{if (@credential_form.source.changes[:release_channel] || @credential_form.data.release_channel) == channel, do: "bg-indigo-600 text-white hover:bg-indigo-500", else: "ring-1 ring-inset ring-slate-300 bg-white text-slate-900 hover:bg-slate-50"}"
+                      ]}
+                    >
+                      <.input
+                        type="radio"
+                        id={Phoenix.HTML.Form.input_id(:credential, :release_channel, channel)}
+                        field={@credential_form[:release_channel]}
+                        value={channel}
+                        class="sr-only"
+                      />
+                      <span><%= Phoenix.Naming.humanize(channel) %></span>
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-span-full">
+                <div class="flex items-center justify-between">
+                  <h2 class="text-sm font-medium leading-6 text-gray-900">
                     <%= gettext("Type") %>
                   </h2>
                 </div>
@@ -83,7 +119,7 @@ defmodule PolarWeb.Dashboard.Credential.NewLive do
                       for={Phoenix.HTML.Form.input_id(:credential, :type, type)}
                       class={[
                         "flex items-center justify-center rounded-md py-3 px-3 text-sm font-semibold sm:flex-1 cursor-pointer focus:outline-none",
-                        "#{if @credential_form.source.changes[:type] == type, do: "bg-indigo-600 text-white hover:bg-indigo-500", else: "ring-1 ring-inset ring-slate-300 bg-white text-slate-900 hover:bg-slate-50"}"
+                        "#{if (@credential_form.source.changes[:type] || @credential_form.data.type) == type, do: "bg-indigo-600 text-white hover:bg-indigo-500", else: "ring-1 ring-inset ring-slate-300 bg-white text-slate-900 hover:bg-slate-50"}"
                       ]}
                     >
                       <.input
@@ -93,7 +129,7 @@ defmodule PolarWeb.Dashboard.Credential.NewLive do
                         value={type}
                         class="sr-only"
                       />
-                      <span><%= type %></span>
+                      <span><%= Phoenix.Naming.humanize(type) %></span>
                     </label>
                   </div>
                 </fieldset>

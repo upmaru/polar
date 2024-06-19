@@ -28,7 +28,7 @@ defmodule Polar.Accounts.Space.Credential do
     field :name, :string
 
     field :token, :binary
-    field :type, :string
+    field :type, :string, default: "lxd"
 
     field :expires_in, :integer, virtual: true
     field :expires_at, :utc_datetime
