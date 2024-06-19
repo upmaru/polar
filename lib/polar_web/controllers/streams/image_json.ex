@@ -20,7 +20,13 @@ defmodule PolarWeb.Streams.ImageJSON do
     {Product.key(product), product_attributes(product, params)}
   end
 
-  defp product_attributes(product, params) do
+  defp product_attributes(product, %{credential: credential} = params) do
+    versions_key =
+      "#{credential.release_channel}_versions"
+      |> String.to_existing_atom()
+
+    versions = get_in(product, [Access.key!(versions_key)])
+
     %{
       aliases: Enum.join(product.aliases, ","),
       arch: product.arch,
@@ -30,7 +36,7 @@ defmodule PolarWeb.Streams.ImageJSON do
       requirements: product.requirements,
       variant: product.variant,
       versions:
-        Enum.map(product.active_versions, &render_version(&1, params))
+        Enum.map(versions, &render_version(&1, params))
         |> Enum.into(%{})
     }
   end
