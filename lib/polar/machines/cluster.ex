@@ -3,6 +3,13 @@ defmodule Polar.Machines.Cluster do
   import Ecto.Changeset
 
   alias __MODULE__.Credential
+  alias __MODULE__.Transitions
+  alias __MODULE__.Event
+
+  use Eventful.Transitable
+
+  Transitions
+  |> governs(:current_state, on: Event)
 
   @valid_attrs ~w(
     name
