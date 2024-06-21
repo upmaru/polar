@@ -13,6 +13,8 @@ config :polar,
 
 config :polar, Polar.Vault, json_library: Jason
 
+config :polar, Oban, engine: Oban.Engines.Basic, queues: [default: 3], repo: Polar.Repo
+
 # Configures the endpoint
 config :polar, PolarWeb.Endpoint,
   url: [host: "localhost"],

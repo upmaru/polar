@@ -68,6 +68,9 @@ defmodule Polar.MixProject do
       {:aws, "~> 0.14.0"},
       {:aws_signature, "~> 0.3.1"},
 
+      # Background processing
+      {:oban, "~> 2.17"},
+
       # Cert
       {:x509, "~> 0.8"},
 

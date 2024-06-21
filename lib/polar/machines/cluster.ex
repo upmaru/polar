@@ -8,7 +8,9 @@ defmodule Polar.Machines.Cluster do
     name
     type
     arch
-    credential
+    credential_endpoint
+    credential_password
+    credential_password_confirmation
   )a
 
   @required_attrs ~w(
@@ -39,7 +41,7 @@ defmodule Polar.Machines.Cluster do
   def changeset(cluster, attrs) do
     cluster
     |> cast(attrs, @valid_attrs)
-    |> validate_required(@valid_attrs)
+    |> validate_required(@required_attrs)
     |> validate_inclusion(:type, ["lxd", "incus"])
     |> validate_inclusion(:arch, ["amd64", "arm64"])
     |> process_credential()

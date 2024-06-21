@@ -5,6 +5,8 @@ defmodule Polar.Machines.Cluster.Credential do
   @valid_attrs ~w(endpoint password password_confirmation)a
   @required_attrs ~w(endpoint password private_key certificate)a
 
+  @derive Jason.Encoder
+
   @primary_key false
   embedded_schema do
     field :endpoint, :string
