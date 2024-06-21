@@ -23,7 +23,9 @@ config :polar, PolarWeb.Endpoint,
   secret_key_base: "6KFZ6zNwk0UXHww8AnEmReHHKixN5GmuKJLFVB+/YvfcvgVaKMwM3G4SvSNz5Z8s",
   server: false
 
-config :polar, Oban, testing: :inline
+config :polar, Oban, testing: :manual
+
+config :polar, :lexdee, Polar.LexdeeMock
 
 # In test we don't send emails.
 config :polar, Polar.Mailer, adapter: Swoosh.Adapters.Test

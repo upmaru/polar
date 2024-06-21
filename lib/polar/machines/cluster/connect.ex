@@ -5,7 +5,7 @@ defmodule Polar.Machines.Cluster.Connect do
   alias Polar.Accounts.User
   alias Polar.Machines.Cluster
 
-  @lexdee Application.compile_env(:instellar, :lexdee) || Lexdee
+  @lexdee Application.compile_env(:polar, :lexdee) || Lexdee
 
   def perform(%Job{args: %{"user_id" => user_id, "cluster_id" => cluster_id}}) do
     user = Repo.get(User, user_id)
