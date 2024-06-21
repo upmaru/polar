@@ -10,6 +10,7 @@ defmodule Polar.Application do
     children = [
       PolarWeb.Telemetry,
       Polar.Repo,
+      {Oban, Application.fetch_env!(:polar, Oban)},
       {DNSCluster, query: Application.get_env(:polar, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Polar.PubSub},
       # Start the Finch HTTP client for sending emails
