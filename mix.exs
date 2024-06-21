@@ -71,6 +71,9 @@ defmodule Polar.MixProject do
       # Background processing
       {:oban, "~> 2.17"},
 
+      # LXD client
+      {:lexdee, "~> 2.3"},
+ 
       # Cert
       {:x509, "~> 0.8"},
 
