@@ -9,6 +9,8 @@ defmodule Polar.Machines.Assessment do
   schema "assessments" do
     field :current_state, :string, default: "created"
 
+    field :check_slug, :string, virtual: true
+
     belongs_to :check, Check
     belongs_to :cluster, Cluster
 
@@ -20,7 +22,7 @@ defmodule Polar.Machines.Assessment do
   @doc false
   def changeset(assessment, attrs) do
     assessment
-    |> cast(attrs, [:current_state])
-    |> validate_required([:current_state])
+    |> cast(attrs, [:cluster_id, :check_slug])
+    |> validate_required([:cluster_id, :check_slug])
   end
 end
