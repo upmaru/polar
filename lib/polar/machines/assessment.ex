@@ -15,19 +15,18 @@ defmodule Polar.Machines.Assessment do
   |> governs(:current_state, on: Event)
 
   @valid_attrs ~w(
-    version_id 
+    check_id 
     cluster_id
   )a
 
   @required_attrs ~w(
-    version_id
+    check_id
     cluster_id
   )a
 
   schema "assessments" do
     field :current_state, :string, default: "created"
 
-    field :check_slug, :string, virtual: true
     belongs_to :check, Check
     belongs_to :cluster, Cluster
 

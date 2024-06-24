@@ -45,8 +45,8 @@ defmodule Polar.Machines.Assessment.ManagerTest do
   describe "create assessment" do
     test "successfully create assessment", %{check: check, cluster: cluster, version: version} do
       assert {:ok, assessment} =
-               Machines.create_assessment(check, %{
-                 version_id: version.id,
+               Machines.create_assessment(version, %{
+                 check_id: check.id,
                  cluster_id: cluster.id
                })
 

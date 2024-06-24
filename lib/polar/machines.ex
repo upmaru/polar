@@ -21,7 +21,7 @@ defmodule Polar.Machines do
 
   alias __MODULE__.Assessment
 
-  defdelegate create_assessment(check, params),
+  defdelegate create_assessment(version, params),
     to: Assessment.Manager,
     as: :create
 end
