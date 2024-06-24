@@ -6,14 +6,28 @@ defmodule Polar.Machines.Assessment do
   alias Polar.Machines.Check
   alias Polar.Machines.Cluster
 
-  @valid_attrs ~w(version_id cluster_id check_slug)a
-  @required_attrs ~w(version_id cluster_id check_slug)a
+  alias __MODULE__.Event
+  alias __MODULE__.Transitions
+
+  use Eventful.Transitable
+
+  Transitions
+  |> governs(:current_state, on: Event)
+
+  @valid_attrs ~w(
+    version_id 
+    cluster_id
+  )a
+
+  @required_attrs ~w(
+    version_id
+    cluster_id
+  )a
 
   schema "assessments" do
     field :current_state, :string, default: "created"
 
     field :check_slug, :string, virtual: true
-
     belongs_to :check, Check
     belongs_to :cluster, Cluster
 
