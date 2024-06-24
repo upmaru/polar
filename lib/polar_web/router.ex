@@ -108,6 +108,7 @@ defmodule PolarWeb.Router do
       resources "/versions/:version_id/events", EventController, only: [:create]
 
       scope "/testing", as: :testing do
+        resources "/checks", Testing.CheckController, only: [:index]
         resources "/clusters", Testing.ClusterController, only: [:index]
 
         resources "/assessments/:assessment_id/events", EventController, only: [:create]

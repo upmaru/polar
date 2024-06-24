@@ -1,4 +1,4 @@
-defmodule PolarWeb.Publish.Version.EventControllerTest do
+defmodule PolarWeb.Publish.EventControllerTest do
   use PolarWeb.ConnCase
 
   import Polar.AccountsFixtures

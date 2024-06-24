@@ -11,6 +11,10 @@ defmodule Polar.Machines do
 
   alias __MODULE__.Check
 
+  defdelegate list_checks(),
+    to: Check.Manager,
+    as: :list
+
   defdelegate create_check(params),
     to: Check.Manager,
     as: :create
