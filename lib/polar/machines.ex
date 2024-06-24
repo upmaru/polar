@@ -9,9 +9,15 @@ defmodule Polar.Machines do
     to: Cluster.Manager,
     as: :create
 
+  alias __MODULE__.Check
+
+  defdelegate create_check(params),
+    to: Check.Manager,
+    as: :create
+
   alias __MODULE__.Assessment
 
-  defdelegate create_assessment(version, params),
+  defdelegate create_assessment(check, params),
     to: Assessment.Manager,
     as: :create
 end

@@ -112,7 +112,7 @@ defmodule PolarWeb.Router do
 
         resources "/assessments/:assessment_id/events", EventController, only: [:create]
 
-        scope "/versions/:version_id" do
+        scope "/checks/:check_id" do
           resources "/assessments", Testing.AssessmentController, only: [:create]
         end
       end

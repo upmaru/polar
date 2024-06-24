@@ -3,11 +3,17 @@ defmodule PolarWeb.Publish.Testing.AssessmentController do
 
   alias Polar.Repo
   alias Polar.Machines
-  alias Polar.Streams.Version
 
-  def create(conn, %{"version_id" => version_id, "assessment" => assessment_params}) do
-    with %Version{} = version <- Repo.get(Version, version_id),
-         {:ok, assessment} <- Machines.create_assessment(version, assessment_params) do
+  alias Polar.Machines.Check
+
+  def create(conn, %{
+        "check_id" => check_id,
+        "assessment" => assessment_params
+      }) do
+    with %Check{} = check <- Repo.get(Check, check_id),
+         {:ok, assessment} <- Machines.create_assessment(check, assessment_params) do
+      assessment = Repo.preload(assessment, [:check])
+
       render(conn, :create, %{assessment: assessment})
     end
   end

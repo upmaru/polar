@@ -6,6 +6,9 @@ defmodule Polar.Machines.Assessment do
   alias Polar.Machines.Check
   alias Polar.Machines.Cluster
 
+  @valid_attrs ~w(version_id cluster_id check_slug)a
+  @required_attrs ~w(version_id cluster_id check_slug)a
+
   schema "assessments" do
     field :current_state, :string, default: "created"
 
@@ -22,7 +25,7 @@ defmodule Polar.Machines.Assessment do
   @doc false
   def changeset(assessment, attrs) do
     assessment
-    |> cast(attrs, [:cluster_id, :check_slug])
-    |> validate_required([:cluster_id, :check_slug])
+    |> cast(attrs, @valid_attrs)
+    |> validate_required(@required_attrs)
   end
 end

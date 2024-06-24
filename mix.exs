@@ -77,6 +77,9 @@ defmodule Polar.MixProject do
       # Cert
       {:x509, "~> 0.8"},
 
+      # Slug
+      {:slugify, "~> 1.3"},
+
       # Encryption
       {:cloak_ecto, "~> 1.3"},
 
