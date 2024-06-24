@@ -99,6 +99,10 @@ defmodule PolarWeb.Router do
     scope "/" do
       pipe_through :publish
 
+      scope "/testing", Testing, as: :testing do
+        resources "/clusters", ClusterController, only: [:index]
+      end
+
       resources "/storage", StorageController, only: [:show], singleton: true
 
       resources "/products", ProductController, only: [:show] do

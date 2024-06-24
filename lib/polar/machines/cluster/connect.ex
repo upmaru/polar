@@ -11,8 +11,6 @@ defmodule Polar.Machines.Cluster.Connect do
     user = Repo.get(User, user_id)
     %{credential: credential} = cluster = Repo.get(Cluster, cluster_id)
 
-    IO.inspect(credential)
-
     client =
       Lexdee.create_client(
         credential["endpoint"],
