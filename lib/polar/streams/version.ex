@@ -16,7 +16,7 @@ defmodule Polar.Streams.Version do
   import Ecto.Query, only: [from: 2]
 
   schema "versions" do
-    field :current_state, :string, default: "active"
+    field :current_state, :string, default: "created"
     field :serial, :string
 
     belongs_to :product, Product

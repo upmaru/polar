@@ -3,6 +3,7 @@ defmodule Polar.Accounts.Space.Credential do
   import Ecto.Changeset
 
   alias Polar.Accounts.Space
+  alias Polar.Streams.ReleaseChannel
 
   alias __MODULE__.Transitions
   alias __MODULE__.Event
@@ -27,10 +28,12 @@ defmodule Polar.Accounts.Space.Credential do
     field :name, :string
 
     field :token, :binary
-    field :type, :string
+    field :type, :string, default: "lxd"
 
     field :expires_in, :integer, virtual: true
     field :expires_at, :utc_datetime
+
+    field :release_channel, :string, default: "active"
 
     belongs_to :space, Space
 
@@ -46,12 +49,13 @@ defmodule Polar.Accounts.Space.Credential do
     expires_in_range_values = Enum.map(@expires_in_range, fn r -> r.value end)
 
     credential
-    |> cast(attrs, [:name, :expires_in, :type])
+    |> cast(attrs, [:name, :expires_in, :type, :release_channel])
     |> generate_token()
     |> validate_inclusion(:expires_in, expires_in_range_values)
     |> validate_inclusion(:type, types())
     |> maybe_set_expires_at()
     |> validate_required([:token, :type, :name])
+    |> validate_inclusion(:release_channel, ReleaseChannel.valid_names())
     |> unique_constraint(:name, name: :space_credentials_space_id_name_index)
   end
 

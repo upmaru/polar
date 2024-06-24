@@ -37,6 +37,7 @@ defmodule Polar.Streams.Product do
     has_one :latest_version, Version, where: [current_state: "active"]
 
     has_many :active_versions, Version, where: [current_state: "active"]
+    has_many :testing_versions, Version, where: [current_state: "testing"]
 
     timestamps(type: :utc_datetime_usec)
   end
@@ -52,6 +53,15 @@ defmodule Polar.Streams.Product do
     |> maybe_set_release_title()
     |> validate_required(@required_attrs)
     |> validate_inclusion(:arch, ["arm64", "amd64"])
+  end
+
+  def scope(:testing, queryable) do
+    from(
+      p in queryable,
+      join: v in assoc(p, :testing_versions),
+      where: not is_nil(v.product_id),
+      group_by: [:id]
+    )
   end
 
   def scope(:active, queryable) do

@@ -68,11 +68,24 @@ defmodule Polar.MixProject do
       {:aws, "~> 0.14.0"},
       {:aws_signature, "~> 0.3.1"},
 
+      # Background processing
+      {:oban, "~> 2.17"},
+
+      # LXD client
+      {:lexdee, "~> 2.3"},
+
       # Cert
       {:x509, "~> 0.8"},
 
+      # Slug
+      {:slugify, "~> 1.3"},
+
+      # Encryption
+      {:cloak_ecto, "~> 1.3"},
+
       # Dev / Test
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 

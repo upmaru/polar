@@ -10,10 +10,12 @@ defmodule Polar.Application do
     children = [
       PolarWeb.Telemetry,
       Polar.Repo,
+      {Oban, Application.fetch_env!(:polar, Oban)},
       {DNSCluster, query: Application.get_env(:polar, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Polar.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Polar.Finch},
+      Polar.Vault,
       # Start a worker by calling: Polar.Worker.start_link(arg)
       # {Polar.Worker, arg},
       # Start to serve requests, typically the last entry
