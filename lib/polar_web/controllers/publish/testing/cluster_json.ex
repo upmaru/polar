@@ -10,6 +10,8 @@ defmodule PolarWeb.Publish.Testing.ClusterJSON do
   def data(%Cluster{} = cluster) do
     %{
       id: cluster.id,
+      type: cluster.type,
+      arch: cluster.arch,
       credential: cluster.credential,
       current_state: cluster.current_state
     }
