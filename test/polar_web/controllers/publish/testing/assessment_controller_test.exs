@@ -69,7 +69,8 @@ defmodule PolarWeb.Publish.Testing.AssessmentControllerTest do
         post(conn, ~p"/publish/testing/versions/#{version.id}/assessments", %{
           "assessment" => %{
             "check_id" => check.id,
-            "cluster_id" => cluster.id
+            "cluster_id" => cluster.id,
+            "instance_type" => "container"
           }
         })
 

@@ -11,7 +11,7 @@ defmodule PolarWeb.Publish.Testing.AssessmentController do
         "assessment" => assessment_params
       }) do
     with %Version{} = check <- Repo.get(Version, version_id),
-         {:ok, assessment} <- Machines.create_assessment(check, assessment_params) do
+         {:ok, assessment} <- Machines.get_or_create_assessment(check, assessment_params) do
       assessment = Repo.preload(assessment, [:check])
 
       conn
