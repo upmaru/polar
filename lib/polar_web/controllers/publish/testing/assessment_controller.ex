@@ -15,7 +15,6 @@ defmodule PolarWeb.Publish.Testing.AssessmentController do
       assessment = Repo.preload(assessment, [:check])
 
       conn
-      |> put_status(:created)
       |> render(:create, %{assessment: assessment})
     end
   end

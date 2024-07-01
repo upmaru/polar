@@ -74,7 +74,7 @@ defmodule PolarWeb.Publish.Testing.AssessmentControllerTest do
           }
         })
 
-      assert %{"data" => data} = json_response(conn, 201)
+      assert %{"data" => data} = json_response(conn, 200)
 
       assert %{"id" => _id, "current_state" => "created", "check" => _check} = data
     end
