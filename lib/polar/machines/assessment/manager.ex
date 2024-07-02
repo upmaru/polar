@@ -14,7 +14,7 @@ defmodule Polar.Machines.Assessment.Manager do
     )
     |> case do
       %Assessment{} = assessment ->
-        assessment
+        {:ok, assessment}
 
       nil ->
         create(version, params)

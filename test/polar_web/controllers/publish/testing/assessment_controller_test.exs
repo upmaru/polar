@@ -79,6 +79,31 @@ defmodule PolarWeb.Publish.Testing.AssessmentControllerTest do
       assert %{"id" => _id, "current_state" => "created", "check" => _check} = data
     end
 
+    test "when assessment already exists", %{
+      version: version,
+      conn: conn,
+      check: check,
+      cluster: cluster
+    } do
+      {:ok, _assessment} =
+        Machines.get_or_create_assessment(version, %{
+          check_id: check.id,
+          cluster_id: cluster.id,
+          instance_type: "container"
+        })
+
+      conn =
+        post(conn, ~p"/publish/testing/versions/#{version.id}/assessments", %{
+          "assessment" => %{
+            "check_id" => check.id,
+            "cluster_id" => cluster.id,
+            "instance_type" => "container"
+          }
+        })
+
+      assert %{"data" => _data} = json_response(conn, 200)
+    end
+
     test "invalid parameter passed in", %{
       version: version,
       conn: conn,
