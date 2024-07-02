@@ -12,6 +12,12 @@ defmodule Polar.Machines.Cluster.Transitions do
 
   Cluster
   |> transition(
+    [from: "healthy", to: "connecting", via: "connect"],
+    fn changes -> transit(changes, Cluster.Triggers) end
+  )
+
+  Cluster
+  |> transition(
     [from: "connecting", to: "healthy", via: "healthy"],
     fn changes -> transit(changes) end
   )
