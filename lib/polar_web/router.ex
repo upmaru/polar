@@ -102,7 +102,7 @@ defmodule PolarWeb.Router do
       resources "/storage", StorageController, only: [:show], singleton: true
 
       resources "/products", ProductController, only: [:show] do
-        resources "/versions", VersionController, only: [:create]
+        resources "/versions", VersionController, only: [:show, :create]
       end
 
       resources "/versions/:version_id/events", EventController, only: [:create]

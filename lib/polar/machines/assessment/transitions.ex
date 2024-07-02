@@ -12,6 +12,18 @@ defmodule Polar.Machines.Assessment.Transitions do
 
   Assessment
   |> transition(
+    [from: "failed", to: "running", via: "run"],
+    fn changes -> transit(changes) end
+  )
+
+  Assessment
+  |> transition(
+    [from: "running", to: "running", via: "run"],
+    fn changes -> transit(changes) end
+  )
+
+  Assessment
+  |> transition(
     [from: "running", to: "passed", via: "pass"],
     fn changes -> transit(changes) end
   )

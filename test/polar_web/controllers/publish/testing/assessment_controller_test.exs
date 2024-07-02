@@ -69,13 +69,31 @@ defmodule PolarWeb.Publish.Testing.AssessmentControllerTest do
         post(conn, ~p"/publish/testing/versions/#{version.id}/assessments", %{
           "assessment" => %{
             "check_id" => check.id,
+            "cluster_id" => cluster.id,
+            "instance_type" => "container"
+          }
+        })
+
+      assert %{"data" => data} = json_response(conn, 200)
+
+      assert %{"id" => _id, "current_state" => "created", "check" => _check} = data
+    end
+
+    test "invalid parameter passed in", %{
+      version: version,
+      conn: conn,
+      check: check,
+      cluster: cluster
+    } do
+      conn =
+        post(conn, ~p"/publish/testing/versions/#{version.id}/assessments", %{
+          "assessment" => %{
+            "check_id" => check.id,
             "cluster_id" => cluster.id
           }
         })
 
-      assert %{"data" => data} = json_response(conn, 201)
-
-      assert %{"id" => _id, "current_state" => "created", "check" => _check} = data
+      assert %{"errors" => _errors} = json_response(conn, 422)
     end
   end
 end

@@ -68,7 +68,11 @@ defmodule PolarWeb.Publish.EventControllerTest do
         })
 
       {:ok, assessment} =
-        Machines.create_assessment(version, %{check_id: check.id, cluster_id: cluster.id})
+        Machines.get_or_create_assessment(version, %{
+          check_id: check.id,
+          cluster_id: cluster.id,
+          instance_type: "container"
+        })
 
       {:ok, assessment: assessment}
     end

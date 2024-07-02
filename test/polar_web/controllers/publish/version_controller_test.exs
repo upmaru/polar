@@ -7,6 +7,8 @@ defmodule PolarWeb.Publish.VersionControllerTest do
   alias Polar.Accounts
   alias Polar.Streams
 
+  import Polar.StreamsFixtures
+
   setup do
     password = Accounts.generate_automation_password()
 
@@ -23,6 +25,27 @@ defmodule PolarWeb.Publish.VersionControllerTest do
       |> put_req_header("authorization", session_token)
 
     {:ok, conn: conn}
+  end
+
+  describe "GET /publish/products/:product_id/versions/:id" do
+    setup do
+      product_attributes = valid_product_attributes("alpine:3.19:amd64:default")
+
+      {:ok, product} = Streams.create_product(product_attributes)
+
+      {:ok, version} =
+        Streams.create_version(product, valid_version_attributes(2))
+
+      {:ok, product: product, version: version}
+    end
+
+    test "can fetch existing version", %{conn: conn, product: product, version: version} do
+      conn = get(conn, "/publish/products/#{product.id}/versions/#{version.serial}")
+
+      assert %{"data" => data} = json_response(conn, 200)
+
+      assert %{"id" => _id} = data
+    end
   end
 
   describe "POST /publish/products/:product_id/versions" do

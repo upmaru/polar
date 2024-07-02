@@ -17,15 +17,19 @@ defmodule Polar.Machines.Assessment do
   @valid_attrs ~w(
     check_id 
     cluster_id
+    instance_type
   )a
 
   @required_attrs ~w(
     check_id
     cluster_id
+    instance_type
   )a
 
   schema "assessments" do
     field :current_state, :string, default: "created"
+
+    field :instance_type, :string
 
     belongs_to :check, Check
     belongs_to :cluster, Cluster
@@ -40,5 +44,6 @@ defmodule Polar.Machines.Assessment do
     assessment
     |> cast(attrs, @valid_attrs)
     |> validate_required(@required_attrs)
+    |> validate_inclusion(:instance_type, ["container", "vm"])
   end
 end
