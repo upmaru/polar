@@ -3,6 +3,8 @@ defmodule PolarWeb.Publish.Testing.CheckController do
 
   alias Polar.Machines
 
+  action_fallback PolarWeb.FallbackController
+
   def index(conn, _params) do
     checks = Machines.list_checks()
 

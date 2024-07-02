@@ -3,6 +3,8 @@ defmodule PolarWeb.Publish.Testing.ClusterController do
 
   alias Polar.Machines
 
+  action_fallback PolarWeb.FallbackController
+
   def index(conn, _params) do
     clusters = Machines.list_clusters(:for_testing)
 
