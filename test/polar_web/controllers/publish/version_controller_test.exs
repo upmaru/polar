@@ -44,7 +44,7 @@ defmodule PolarWeb.Publish.VersionControllerTest do
 
       assert %{"data" => data} = json_response(conn, 200)
 
-      assert %{"id" => _id} = data
+      assert %{"id" => _id, "serial" => _serial} = data
     end
   end
 
@@ -90,7 +90,7 @@ defmodule PolarWeb.Publish.VersionControllerTest do
 
       assert %{"data" => data} = json_response(conn, 201)
 
-      assert %{"id" => _id} = data
+      assert %{"id" => _id, "serial" => _serial} = data
     end
   end
 end
