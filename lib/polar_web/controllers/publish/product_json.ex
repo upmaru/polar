@@ -5,7 +5,8 @@ defmodule PolarWeb.Publish.ProductJSON do
     %{
       data: %{
         id: product.id,
-        key: Product.key(product)
+        key: Product.key(product),
+        requirements: product.requirements
       }
     }
   end

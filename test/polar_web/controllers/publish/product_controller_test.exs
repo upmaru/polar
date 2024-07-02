@@ -57,7 +57,9 @@ defmodule PolarWeb.Publish.ProductControllerTest do
 
       assert %{"data" => data} = json_response(conn, 200)
 
-      assert %{"id" => _id, "key" => _key} = data
+      assert %{"id" => _id, "key" => _key, "requirements" => requirements} = data
+
+      assert %{"secureboot" => "false"} = requirements
     end
   end
 end
