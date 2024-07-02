@@ -12,6 +12,12 @@ defmodule Polar.Streams.Version.Transitions do
 
   Version
   |> transition(
+    [from: "testing", to: "testing", via: "test"],
+    fn changes -> transit(changes) end
+  )
+
+  Version
+  |> transition(
     [from: "inactive", to: "testing", via: "test"],
     fn changes -> transit(changes) end
   )
