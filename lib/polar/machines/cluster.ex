@@ -41,6 +41,8 @@ defmodule Polar.Machines.Cluster do
     field :credential_password_confirmation, :string, virtual: true
     field :credential, Polar.Encrypted.Map
 
+    embeds_many :instance_wait_times, __MODULE__.WaitTime, on_replace: :delete
+
     timestamps(type: :utc_datetime_usec)
   end
 
@@ -51,12 +53,14 @@ defmodule Polar.Machines.Cluster do
     |> validate_required(@required_attrs)
     |> validate_inclusion(:type, ["lxd", "incus"])
     |> validate_inclusion(:arch, ["amd64", "arm64"])
+    |> cast_embed(:instance_wait_times)
     |> process_credential()
   end
 
   def update_changeset(cluster, attrs) do
     cluster
     |> cast(attrs, [:credential_endpoint])
+    |> cast_embed(:instance_wait_times)
     |> maybe_update_credential()
   end
 

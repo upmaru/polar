@@ -28,7 +28,11 @@ defmodule PolarWeb.Publish.Testing.ClusterControllerTest do
         arch: "amd64",
         credential_endpoint: "some.cluster.com:8443",
         credential_password: "sometoken",
-        credential_password_confirmation: "sometoken"
+        credential_password_confirmation: "sometoken",
+        instance_wait_times: [
+          %{type: "vm", duration: 10_000},
+          %{type: "container", duration: 5_000}
+        ]
       })
 
     {:ok, _created_cluster} =
@@ -38,7 +42,11 @@ defmodule PolarWeb.Publish.Testing.ClusterControllerTest do
         arch: "amd64",
         credential_endpoint: "some.cluster.com:8443",
         credential_password: "sometoken",
-        credential_password_confirmation: "sometoken"
+        credential_password_confirmation: "sometoken",
+        instance_wait_times: [
+          %{type: "vm", duration: 10_000},
+          %{type: "container", duration: 5_000}
+        ]
       })
 
     {:ok, conn: conn, cluster: cluster, user: user}
@@ -62,6 +70,12 @@ defmodule PolarWeb.Publish.Testing.ClusterControllerTest do
       assert %{"data" => data} = json_response(conn, 200)
 
       assert cluster.id in Enum.map(data, & &1["id"])
+
+      cluster = List.first(data)
+
+      assert %{"instance_wait_times" => instance_wait_times} = cluster
+
+      assert Enum.count(instance_wait_times) == 2
     end
   end
 end

@@ -13,7 +13,8 @@ defmodule PolarWeb.Publish.Testing.ClusterJSON do
       type: cluster.type,
       arch: cluster.arch,
       credential: cluster.credential,
-      current_state: cluster.current_state
+      current_state: cluster.current_state,
+      instance_wait_times: cluster.instance_wait_times
     }
   end
 end
