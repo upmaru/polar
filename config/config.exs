@@ -13,7 +13,13 @@ config :polar,
 
 config :polar, Polar.Vault, json_library: Jason
 
-config :polar, Oban, engine: Oban.Engines.Basic, queues: [default: 3], repo: Polar.Repo
+config :polar, Oban,
+  engine: Oban.Engines.Basic,
+  queues: [default: 3],
+  repo: Polar.Repo,
+  plugins: [
+    {Oban.Plugins.Cron, crontab: [{"@daily", Polar.Streams.Version.Pruning}]}
+  ]
 
 # Configures the endpoint
 config :polar, PolarWeb.Endpoint,
