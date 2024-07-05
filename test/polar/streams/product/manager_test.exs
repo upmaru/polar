@@ -11,13 +11,13 @@ defmodule Polar.Streams.Product.ManagerTest do
   setup do
     password = Accounts.generate_automation_password()
 
-    _bot = bot_fixture(%{password: password})
+    bot = bot_fixture(%{password: password})
 
-    :ok
+    {:ok, bot: bot}
   end
 
   describe "filter" do
-    setup do
+    setup %{bot: bot} do
       {:ok, %Product{} = without_active_versions} =
         Streams.create_product(%{
           aliases: ["alpine/3.19", "alpine/3.19/default"],
@@ -44,7 +44,7 @@ defmodule Polar.Streams.Product.ManagerTest do
           }
         })
 
-      {:ok, _version} =
+      {:ok, version} =
         Streams.create_version(with_active_versions, %{
           serial: "20240209_13:00",
           items: [
@@ -64,6 +64,12 @@ defmodule Polar.Streams.Product.ManagerTest do
             }
           ]
         })
+
+      {:ok, %{resource: testing_version}} =
+        Eventful.Transit.perform(version, bot, "test")
+
+      {:ok, %{resource: _active_version}} =
+        Eventful.Transit.perform(testing_version, bot, "activate")
 
       {:ok,
        without_active_versions: without_active_versions,

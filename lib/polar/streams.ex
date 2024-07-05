@@ -23,7 +23,7 @@ defmodule Polar.Streams do
     to: Version.Manager,
     as: :create
 
-  defdelegate deactivate_previous_versions(version),
+  defdelegate deactivate_previous_versions(event, version),
     to: Version.Manager,
     as: :deactivate_previous
 

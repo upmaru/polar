@@ -10,7 +10,8 @@ The build system for polar is called [icepak](https://github.com/upmaru/icepak).
 
 ## Demo
 
-+ [Sandbox Site](https://images.opsmaru.dev)
++ [Production](https://images.opsmaru.com)
++ [Sandbox](https://images.opsmaru.dev)
 
 ## Basic Architecture
 

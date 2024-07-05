@@ -11,7 +11,7 @@ defmodule Polar.Streams.Version.TransitionsTest do
 
     password = Accounts.generate_automation_password()
 
-    _bot = bot_fixture(%{password: password})
+    bot = bot_fixture(%{password: password})
 
     {:ok, product} =
       Streams.create_product(%{
@@ -47,7 +47,12 @@ defmodule Polar.Streams.Version.TransitionsTest do
         ]
       })
 
-    {:ok, user: user, version: version}
+    {:ok, %{resource: testing_version}} = Eventful.Transit.perform(version, bot, "test")
+
+    {:ok, %{resource: active_version}} =
+      Eventful.Transit.perform(testing_version, bot, "activate")
+
+    {:ok, user: user, version: active_version}
   end
 
   describe "deactivate" do

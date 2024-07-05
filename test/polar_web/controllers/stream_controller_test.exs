@@ -12,7 +12,7 @@ defmodule PolarWeb.StreamControllerTest do
 
     password = Accounts.generate_automation_password()
 
-    _bot = bot_fixture(%{password: password})
+    bot = bot_fixture(%{password: password})
 
     {:ok, space} = Accounts.create_space(user, %{name: "some-test-123"})
 
@@ -36,7 +36,7 @@ defmodule PolarWeb.StreamControllerTest do
         }
       })
 
-    {:ok, _version} =
+    {:ok, version} =
       Streams.create_version(product, %{
         serial: "20240209_13:00",
         items: [
@@ -56,6 +56,11 @@ defmodule PolarWeb.StreamControllerTest do
           }
         ]
       })
+
+    {:ok, %{resource: testing_version}} = Eventful.Transit.perform(version, bot, "test")
+
+    {:ok, %{resource: _active_version}} =
+      Eventful.Transit.perform(testing_version, bot, "activate")
 
     {:ok, product: product, credential: credential}
   end

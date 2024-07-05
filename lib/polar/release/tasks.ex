@@ -1,4 +1,4 @@
-defmodule Polar.Release do
+defmodule Polar.Release.Tasks do
   @app :polar
 
   def migrate do

@@ -44,5 +44,29 @@ defmodule PolarWeb.Dashboard.Credential.NewLiveTest do
 
       assert render(lv) =~ "can&#39;t be blank"
     end
+
+    test "create new credential with testing release channel", %{conn: conn, space: space} do
+      {:ok, lv, _html} = live(conn, ~p"/dashboard/spaces/#{space.id}/credentials/new")
+
+      lv
+      |> form("#new-credential-form", %{
+        "credential" => %{
+          "name" => "new-cred-test-testing",
+          "type" => "lxd",
+          "release_channel" => "testing",
+          "expires_in" => "2592000"
+        }
+      })
+      |> render_submit()
+
+      credential = Repo.get_by!(Space.Credential, name: "new-cred-test-testing")
+
+      assert credential.release_channel == "testing"
+
+      {:ok, lv, _html} =
+        live(conn, ~p"/dashboard/spaces/#{space.id}/credentials/#{credential.id}")
+
+      assert render(lv) =~ "testing"
+    end
   end
 end

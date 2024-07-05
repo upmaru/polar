@@ -5,15 +5,21 @@ defmodule PolarWeb.Streams.ImageController do
   alias Polar.Accounts
   alias Polar.Streams
 
+  alias Polar.Streams.ReleaseChannel
+
   action_fallback PolarWeb.FallbackController
 
   def index(conn, %{"space_token" => space_token}) do
     credential = Accounts.get_space_credential(token: space_token)
 
     if credential do
+      release_channel =
+        ReleaseChannel.entries()
+        |> Map.fetch!(credential.release_channel)
+
       products =
-        Streams.list_products([:active])
-        |> Repo.preload(active_versions: [:items])
+        Streams.list_products(release_channel.scope)
+        |> Repo.preload(release_channel.preload)
 
       render(conn, :index, %{products: products, credential: credential})
     end

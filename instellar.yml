@@ -33,7 +33,7 @@ build:
 run:
   commands:
     - binary: polar
-      call: eval 'Polar.Release.migrate'
+      call: eval 'Polar.Release.Tasks.migrate'
       name: migrate
     - binary: polar
       call: remote
@@ -81,4 +81,6 @@ kits:
         driver: database/postgresql
         key: DATABASE
       - driver: bucket/aws-s3
+        driver_options:
+          acl: public
         key: AWS_S3
